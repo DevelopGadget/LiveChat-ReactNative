@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "SocialRed",
+    "name": "LiveChat",
     "description": "This project is really great.",
-    "slug": "SocialRed",
+    "slug": "LiveChat",
     "privacy": "public",
     "sdkVersion": "29.0.0",
     "platforms": ["ios", "android"],
@@ -10,9 +10,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#800080"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
