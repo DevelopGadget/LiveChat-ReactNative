@@ -10,5 +10,8 @@ export default Estilo = StyleSheet.create({
     },
     CenterFlex: {
         justifyContent: 'center'
+    },
+    Color: {
+        color: 'violet'
     }
 });
