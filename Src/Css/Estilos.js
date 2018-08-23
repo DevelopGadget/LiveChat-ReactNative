@@ -1,9 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-const Estilo = StyleSheet.create({
-    Fondo: {
-        backgroundColor: linear-gradient('#800080', '#000')
+export default Estilo = StyleSheet.create({
+    Pantalla: {
+        width: '100%',
+        height: '100%'
+    },
+    Content: {
+        flex: 1
+    },
+    CenterFlex: {
+        justifyContent: 'center'
     }
 });
-
-module.exports = { Estilo }
