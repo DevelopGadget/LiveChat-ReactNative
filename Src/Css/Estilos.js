@@ -16,8 +16,8 @@ export default Estilo = StyleSheet.create({
         color: 'violet'
     },
     Imagen: {
-        width: '70%',
-        height: '70%',
+        width: '90%',
+        height: '90%',
         flex: 1
     },
     Boton: {

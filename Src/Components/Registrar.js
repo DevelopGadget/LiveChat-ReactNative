@@ -18,7 +18,7 @@ export default class Registrar extends React.Component {
         try {
             let result = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                aspect: [4, 3],
+                aspect: [3, 4],
             });
 
             if (!result.cancelled) {
@@ -33,10 +33,10 @@ export default class Registrar extends React.Component {
         return (
             <Container>
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
-                    <SimpleAnimation style={{ flex: 1 }} fade delay={500} duration={1000} staticType='bounce' movementType='slide' direction='left'>
+                    <SimpleAnimation style={Estilos.Content} fade delay={500} duration={1000} staticType='bounce' movementType='slide' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
-                                <Row size={2}>
+                                <Row size={1}>
                                     <Form style={[Estilos.Content, Estilos.CenterFlex]}>
                                         <Item floatingLabel last>
                                             <Icon name='pencil' style={Estilos.Color} type='FontAwesome' />
@@ -55,35 +55,27 @@ export default class Registrar extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Col size={3}>
-                                    <Button iconLeft style={Estilos.Boton} block onPress={this._pickImage.bind(this)}>
-                                        <Icon name='folder-multiple-image' type='MaterialCommunityIcons' />
-                                        <Text>Añadir Imagen</Text>
-                                    </Button>
-                                    <Card>
-                                        <CardItem>
-                                            <Left>
-                                                <Body>
-                                                    <Text>Imagenes</Text>
-                                                    <Text note>Vizualizador</Text>
-                                                </Body>
-                                            </Left>
-                                        </CardItem>
-                                        <CardItem cardBody>
-                                            <Image source={{ uri: this.state.Usuario.ImageUrl }} resizeMode='contain' style={{ height: 300, width: null, flex: 1 }} onError={() => this.setState({ Usuario: { ImageUrl: NotFound } })} />
-                                        </CardItem>
-                                    </Card>
-                                </Col>
-                                <Col size={1} style={Estilos.Content}>
-                                    <Button iconLeft style={Estilos.Boton} block>
-                                        <Icon name='add-box' type='MaterialIcons' />
-                                        <Text>Registrar</Text>
-                                    </Button>
-                                    <Button iconLeft transparent block>
-                                        <Icon name='arrow-left' type='FontAwesome' style={Estilos.Color} onPress={() => this.props.navigation.navigate('Login')} />
-                                        <Text style={Estilos.Color}>Cancelar</Text>
-                                    </Button>
-                                </Col>
+                                <Row size={3}>
+                                    <Col>
+                                        <Button iconLeft style={Estilos.Boton} block onPress={this._pickImage.bind(this)}>
+                                            <Icon name='folder-multiple-image' type='MaterialCommunityIcons' />
+                                            <Text>Añadir Imagen</Text>
+                                        </Button>
+                                        <Card>
+                                            <CardItem cardBody>
+                                                <Image source={{ uri: this.state.Usuario.ImageUrl }} resizeMode='contain' style={{ height: 200, width: null, flex: 1 }} onError={() => this.setState({ Usuario: { ImageUrl: NotFound } })} />
+                                            </CardItem>
+                                        </Card>
+                                        <Button iconLeft style={Estilos.Boton} block>
+                                            <Icon name='add-box' type='MaterialIcons' />
+                                            <Text>Registrar</Text>
+                                        </Button>
+                                        <Button iconLeft transparent block>
+                                            <Icon name='arrow-left' type='FontAwesome' style={Estilos.Color} onPress={() => this.props.navigation.navigate('Login')} />
+                                            <Text style={Estilos.Color}>Cancelar</Text>
+                                        </Button>
+                                    </Col>
+                                </Row>
                             </Grid>
                         </Content>
                     </SimpleAnimation>

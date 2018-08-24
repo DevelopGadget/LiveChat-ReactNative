@@ -5,10 +5,14 @@
     "slug": "LiveChat",
     "privacy": "public",
     "sdkVersion": "29.0.0",
+    "primaryColor": "#800080",
     "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "androidStatusBar": {
+      "backgroundColor": "#800080"
+    },
     "splash": {
       "image": "./assets/icon.png",
       "resizeMode": "contain",

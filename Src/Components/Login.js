@@ -11,13 +11,13 @@ export default class Login extends React.Component {
         return (
             <Container>
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
-                    <SimpleAnimation style={{ flex: 1 }} fade delay={500} duration={1000} staticType='bounce' movementType='slide' direction='left'>
+                    <SimpleAnimation style={Estilos.Content} fade delay={500} duration={1000} staticType='bounce' movementType='slide' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
-                                <Row size={3} style={Estilos.CenterFlex}>
+                                <Row size={3} style={{alignItems: 'flex-end'}}>
                                     <Image source={require('../../assets/icon.png')} style={Estilos.Imagen} resizeMode='contain' />
                                 </Row>
-                                <Row size={1}>
+                                <Row size={2} style={{alignItems: 'flex-start'}}>
                                     <Form style={Estilos.Content}>
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
@@ -31,7 +31,7 @@ export default class Login extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Col size={1} style={Estilos.CenterFlex}>
+                                <Col size={2} style={Estilos.CenterFlex}>
                                     <Button iconLeft transparent block>
                                         <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
                                         <Text style={Estilos.Color}>Recuperar Contraseña</Text>
