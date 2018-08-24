@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import Login from './Src/Components/Login';
+import Registrar from './Src/Components/Registrar';
 import { Spinner } from 'native-base';
 import Estilos from './Src/Css/Estilos';
 import { LinearGradient } from 'expo';
@@ -34,5 +35,6 @@ export default class App extends React.Component {
 }
 
 const Navigation = createStackNavigator({
-  Login: { screen: Login, navigationOptions: () => ({ header: null }) }
+  Login: { screen: Login, navigationOptions: () => ({ header: null }) },
+  Registrar: { screen: Registrar, navigationOptions: () => ({ header: null }) }
 })

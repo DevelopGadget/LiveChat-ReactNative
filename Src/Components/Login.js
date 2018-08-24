@@ -31,7 +31,7 @@ export default class Login extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Col size={2} style={Estilos.CenterFlex}>
+                                <Col size={1} style={Estilos.CenterFlex}>
                                     <Button iconLeft transparent block>
                                         <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
                                         <Text style={Estilos.Color}>Recuperar Contraseña</Text>
@@ -40,7 +40,7 @@ export default class Login extends React.Component {
                                         <Icon name='login' type='Entypo' />
                                         <Text>Entrar</Text>
                                     </Button>
-                                    <Button iconLeft transparent block>
+                                    <Button iconLeft transparent block onPress={() => this.props.navigation.push('Registrar')}>
                                         <Icon name='add-box' type='MaterialIcons' style={Estilos.Color} />
                                         <Text style={Estilos.Color}>Registrar</Text>
                                     </Button>
