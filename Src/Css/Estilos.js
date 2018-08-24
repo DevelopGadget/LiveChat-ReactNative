@@ -18,12 +18,7 @@ export default Estilo = StyleSheet.create({
     Imagen: {
         width: '70%',
         height: '70%',
-        alignItems: 'center',
         flex: 1
-    },
-    Form: {
-        flex: 1,
-        justifyContent: 'flex-start'
     },
     Boton: {
         backgroundColor: 'violet'
