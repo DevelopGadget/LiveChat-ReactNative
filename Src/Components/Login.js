@@ -11,14 +11,14 @@ export default class Login extends React.Component {
         return (
             <Container>
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
-                    <SimpleAnimation style={Estilos.Content} fade delay={500} duration={1000} staticType='bounce' movementType='slide' direction='left'>
+                    <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
-                                <Row size={3} style={{alignItems: 'flex-end'}}>
+                                <Row size={1} style={Estilos.CenterFlex}>
                                     <Image source={require('../../assets/icon.png')} style={Estilos.Imagen} resizeMode='contain' />
                                 </Row>
-                                <Row size={2} style={{alignItems: 'flex-start'}}>
-                                    <Form style={Estilos.Content}>
+                                <Row size={1} style={Estilos.End}>
+                                    <Form style={[Estilos.Content, Estilos.CenterFlex]}>
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
@@ -31,23 +31,25 @@ export default class Login extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Col size={2} style={Estilos.CenterFlex}>
-                                    <Button iconLeft transparent block>
-                                        <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
-                                        <Text style={Estilos.Color}>Recuperar Contraseña</Text>
-                                    </Button>
-                                    <Button iconLeft style={Estilos.Boton} block>
-                                        <Icon name='login' type='Entypo' />
-                                        <Text>Entrar</Text>
-                                    </Button>
-                                    <Button iconLeft transparent block onPress={() => this.props.navigation.push('Registrar')}>
-                                        <Icon name='add-box' type='MaterialIcons' style={Estilos.Color} />
-                                        <Text style={Estilos.Color}>Registrar</Text>
-                                    </Button>
-                                </Col>
+                                <Row size={1} style={[Estilos.CenterFlex]}>
+                                    <Col style={[Estilos.CenterFlex]}>
+                                        <Button iconLeft transparent block>
+                                            <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
+                                            <Text style={Estilos.Color}>Recuperar Contraseña</Text>
+                                        </Button>
+                                        <Button iconLeft style={Estilos.Boton} block>
+                                            <Icon name='login' type='Entypo' />
+                                            <Text>Entrar</Text>
+                                        </Button>
+                                        <Button iconLeft transparent block onPress={() => this.props.navigation.push('Registrar')}>
+                                            <Icon name='add-box' type='MaterialIcons' style={Estilos.Color} />
+                                            <Text style={Estilos.Color}>Registrar</Text>
+                                        </Button>
+                                    </Col>
+                                </Row>
                             </Grid>
                         </Content>
-                    </SimpleAnimation>
+                     </SimpleAnimation>
                 </LinearGradient>
             </Container>
         );

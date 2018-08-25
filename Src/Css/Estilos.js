@@ -22,5 +22,11 @@ export default Estilo = StyleSheet.create({
     },
     Boton: {
         backgroundColor: 'violet'
+    }, 
+    Start: {
+        alignItems: 'flex-start'
+    },
+    End: {
+        alignItems: 'flex-end'
     }
 });
