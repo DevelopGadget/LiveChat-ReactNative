@@ -5,12 +5,19 @@ import Registrar from './Src/Components/Registrar';
 import { Spinner } from 'native-base';
 import Estilos from './Src/Css/Estilos';
 import { LinearGradient } from 'expo';
+import { BackHandler } from 'react-native';
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { Load: false }
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', function () {
+      BackHandler.exitApp();
+    });
   }
 
   async componentWillMount() {

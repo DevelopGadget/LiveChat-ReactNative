@@ -14,24 +14,24 @@ export default class Login extends React.Component {
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
-                                <Row size={1} style={Estilos.CenterFlex}>
+                                <Row size={2} style={Estilos.CenterFlex}>
                                     <Image source={require('../../assets/icon.png')} style={Estilos.Imagen} resizeMode='contain' />
                                 </Row>
-                                <Row size={1} style={Estilos.End}>
+                                <Row size={1} style={[Estilos.Start]}>
                                     <Form style={[Estilos.Content, Estilos.CenterFlex]}>
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
-                                            <Input style={Estilos.Color} />
+                                            <Input style={Estilos.Color} keyboardType={'email-address'} disableFullscreenUI={false}/>
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />
                                             <Label style={Estilos.Color}>Password</Label>
-                                            <Input style={Estilos.Color} />
+                                            <Input style={Estilos.Color} secureTextEntry/>
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Row size={1} style={[Estilos.CenterFlex]}>
+                                <Row size={2} style={[Estilos.CenterFlex]}>
                                     <Col style={[Estilos.CenterFlex]}>
                                         <Button iconLeft transparent block>
                                             <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />

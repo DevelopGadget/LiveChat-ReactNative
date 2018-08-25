@@ -43,7 +43,7 @@ export default class Registrar extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Row size={1} style={Estilos.CenterFlex}>
+                                <Row size={1} style={Estilos.End}>
                                     <Col style={[Estilos.CenterFlex]}>
                                         <Button iconLeft style={Estilos.Boton} block>
                                             <Icon name='add-box' type='MaterialIcons' />
