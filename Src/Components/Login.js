@@ -22,21 +22,21 @@ export default class Login extends React.Component {
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
-                                            <Input style={Estilos.Color} keyboardType={'email-address'} disableFullscreenUI={false}/>
+                                            <Input style={Estilos.Color} keyboardType={'email-address'} disableFullscreenUI={false} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />
                                             <Label style={Estilos.Color}>Password</Label>
-                                            <Input style={Estilos.Color} secureTextEntry/>
+                                            <Input style={Estilos.Color} secureTextEntry />
                                         </Item>
                                     </Form>
+                                    <Button iconLeft transparent block>
+                                        <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
+                                        <Text style={Estilos.Color}>Recuperar Contraseña</Text>
+                                    </Button>
                                 </Row>
                                 <Row size={2} style={[Estilos.CenterFlex]}>
                                     <Col style={[Estilos.CenterFlex]}>
-                                        <Button iconLeft transparent block>
-                                            <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
-                                            <Text style={Estilos.Color}>Recuperar Contraseña</Text>
-                                        </Button>
                                         <Button iconLeft style={Estilos.Boton} block>
                                             <Icon name='login' type='Entypo' />
                                             <Text>Entrar</Text>
@@ -49,7 +49,7 @@ export default class Login extends React.Component {
                                 </Row>
                             </Grid>
                         </Content>
-                     </SimpleAnimation>
+                    </SimpleAnimation>
                 </LinearGradient>
             </Container>
         );

@@ -21,7 +21,7 @@ export default class Registrar extends React.Component {
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
-                                <Row size={1} style={Estilos.End}>
+                                <Row size={2} style={Estilos.End}>
                                     <Image source={require('../../assets/Add.png')} style={Estilos.Imagen} resizeMode='contain' />
                                 </Row>
                                 <Row size={1} style={Estilos.Start}>
@@ -43,7 +43,7 @@ export default class Registrar extends React.Component {
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Row size={1} style={Estilos.End}>
+                                <Row size={2} style={Estilos.End}>
                                     <Col style={[Estilos.CenterFlex]}>
                                         <Button iconLeft style={Estilos.Boton} block>
                                             <Icon name='add-box' type='MaterialIcons' />
