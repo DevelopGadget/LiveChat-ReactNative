@@ -29,11 +29,11 @@ export default class Login extends React.Component {
                                             <Label style={Estilos.Color}>Password</Label>
                                             <Input style={Estilos.Color} secureTextEntry />
                                         </Item>
+                                        <Button iconLeft transparent block>
+                                            <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
+                                            <Text style={Estilos.Color}>Recuperar Contraseña</Text>
+                                        </Button>
                                     </Form>
-                                    <Button iconLeft transparent block>
-                                        <Icon name='backup-restore' type='MaterialCommunityIcons' style={Estilos.Color} />
-                                        <Text style={Estilos.Color}>Recuperar Contraseña</Text>
-                                    </Button>
                                 </Row>
                                 <Row size={2} style={[Estilos.CenterFlex]}>
                                     <Col style={[Estilos.CenterFlex]}>
