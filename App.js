@@ -43,5 +43,5 @@ export default class App extends React.Component {
 
 const Navigation = createStackNavigator({
   Login: { screen: Login, navigationOptions: () => ({ header: null }) },
-  Registrar: { screen: Registrar, navigationOptions: () => ({ header: null }) }
+  Registrar: { screen: Registrar, navigationOptions: () => ({ header: null }) },
 })

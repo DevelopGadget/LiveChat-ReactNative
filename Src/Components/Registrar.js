@@ -1,11 +1,10 @@
 import React from 'react';
-import { Container, Form, Item, Input, Label, Icon, Button, Text, Content, View } from 'native-base';
+import { Container, Form, Item, Input, Label, Icon, Button, Text, Content } from 'native-base';
 import Estilos from '../Css/Estilos';
 import { Image } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class Registrar extends React.Component {
 
