@@ -1,6 +1,8 @@
+import React from 'react';
 import Perfil from './Perfil';
 import { createBottomTabNavigator } from 'react-navigation';
-import { Footer, FooterTab, Button, Icon, Text } from 'native-base';
+import { Footer, FooterTab, Button, Icon, Text, StyleProvider, getTheme } from 'native-base';
+import EstiloTab from '../Css/EstiloTab';
 
 export default Tabs = createBottomTabNavigator({
     Perfil: { screen: Perfil }
@@ -12,22 +14,21 @@ export default Tabs = createBottomTabNavigator({
             tabBarComponent: (props) => {
                 const { routeName } = navigation.state;
                 return (
-                    <Footer>
-                        <FooterTab>
-                            <Button vertical active={routeName == 'Mensajes'}>
-                                <Icon type='' name='' color='#ffff'/>
-                                <Text active={routeName == 'Mensajes'}>Mensajes</Text>
-                            </Button>
-                            <Button vertical active={routeName == 'Buscar'}>
-                                <Icon type='' name='' color='#ffff'/>
-                                <Text active={routeName == 'Buscar'}>Buscar</Text>
-                            </Button>
-                            <Button vertical active={routeName == 'Perfil'} onPress={() => props.navigation.navigate('Perfil')}>
-                                <Icon type='' name='' color='#ffff'/>
-                                <Text active={routeName == 'Perfil'}>Mensajes</Text>
-                            </Button>
-                        </FooterTab>
-                    </Footer>
+                    <StyleProvider style={getTheme(EstiloTab)}>
+                        <Footer>
+                            <FooterTab>
+                                <Button active={routeName == 'Mensajes'}>
+                                    <Icon type='Entypo' name='message' />
+                                </Button>
+                                <Button active={routeName == 'Buscar'}>
+                                    <Icon type='FontAwesome' name='search' />
+                                </Button>
+                                <Button active={routeName == 'Perfil'} onPress={() => props.navigation.navigate('Perfil')}>
+                                    <Icon type='FontAwesome' name='user' />
+                                </Button>
+                            </FooterTab>
+                        </Footer>
+                    </StyleProvider>
                 );
             }
         })
