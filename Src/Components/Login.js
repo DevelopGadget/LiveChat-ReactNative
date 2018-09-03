@@ -2,11 +2,17 @@ import React from 'react';
 import { Container, Form, Item, Input, Label, Icon, Button, Text, Content } from 'native-base';
 import Estilos from '../Css/Estilos';
 import { LinearGradient } from 'expo';
-import { Image } from 'react-native';
+import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 
 export default class Login extends React.Component {
+
+    constructor(props){
+        super(props);
+        StatusBar.setHidden(true);
+    }
+
     render() {
         return (
             <Container>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Content, H3, Thumbnail, Card, CardItem, Text, Icon, Left, Body, Right, StyleProvider, getTheme } from 'native-base';
 import Estilos from '../Css/Estilos';
+import Alertas from 'react-native-increibles-alertas';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';

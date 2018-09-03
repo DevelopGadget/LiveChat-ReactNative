@@ -31,7 +31,7 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.Load) {
-      return (<Tabs></Tabs>);
+      return (<Navigation></Navigation>);
     } else {
       return (
         <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={[Estilos.Content, Estilos.CenterFlex]}>

@@ -1,22 +1,24 @@
 import React from 'react';
 import { Container, Form, Item, Input, Label, Icon, Button, Text, Content } from 'native-base';
 import Estilos from '../Css/Estilos';
-import { Image } from 'react-native';
+import { Image, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
+import Alertas from 'react-native-increibles-alertas';
 
 export default class Registrar extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { Email: '', Password: '', Nombre: '', Alert: { Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', BotonCancelado: false } }
+        StatusBar.setHidden(true);
+        this.state = { Email: '', Password: '', Nombre: '', Alert: { Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: ''} }
     }
 
     Registrar = () => {
         if (this.state.Email.length <= 0 || this.state.Nombre.length <= 0 || this.state.Password.length <= 0 || this.state.Email.indexOf(" ") !== -1 ||
             this.state.Password.indexOf(" ") !== -1) {
-            this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: 'Todos los campos son requeridos, email y contraseña no deben tener espacio', BotonCancelado: false } })
+            this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: 'Todos los campos son requeridos, email y contraseña no deben tener espacio', Tipo: 'error' } });
         } else {
 
         }
@@ -25,6 +27,17 @@ export default class Registrar extends React.Component {
     render() {
         return (
             <Container>
+                <Alertas
+                    Tipo={this.state.Alert.Tipo}
+                    Titulo={this.state.Alert.Titulo}
+                    Mensaje={this.state.Alert.Mensaje}
+                    Spinner={this.state.Alert.Spinner}
+                    Mostrar={this.state.Alert.Mostrar}
+                    BotonCancelado={true}
+                    TextoBotonCancelado='Cancelar'
+                    TextoBotonConfirmado='Ok'
+                    onBotonCancelado={() => { }}
+                    onBotonConfirmado={() => { }} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
@@ -47,7 +60,7 @@ export default class Registrar extends React.Component {
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />
                                             <Label style={Estilos.Color}>Password</Label>
-                                            <Input style={Estilos.Color} />
+                                            <Input style={Estilos.Color} secureTextEntry/>
                                         </Item>
                                     </Form>
                                 </Row>
