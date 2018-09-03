@@ -1,9 +1,36 @@
 import React from 'react';
-import { Container, Content } from 'native-base';
+import { Container, Content, H3, Thumbnail, Card, CardItem, Text, Icon, Left, Body, Right, StyleProvider, getTheme } from 'native-base';
 import Estilos from '../Css/Estilos';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
+
+const Cards = [
+    {
+        Texto: 'Seguidores',
+        NombreIcono: 'heartbeat'
+    },
+    {
+        Texto: 'Seguidos',
+        NombreIcono: 'hand-peace-o'
+    },
+    {
+        Texto: 'Cambiar Foto',
+        NombreIcono: 'image'
+    },
+    {
+        Texto: 'Cambiar Nombre',
+        NombreIcono: 'user'
+    },
+    {
+        Texto: 'Salir',
+        NombreIcono: 'remove'
+    },
+    {
+        Texto: 'Borrar Cuenta',
+        NombreIcono: 'user-times'
+    }
+];
 
 export default class Perfil extends React.Component {
 
@@ -16,13 +43,33 @@ export default class Perfil extends React.Component {
             <Container>
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
-                        <Content style={Estilos.Content}>
-                            <Grid style={Estilos.Content}>
-                                <Row size={1}>
-                                    
+                        <Content contentContainerStyle={Estilos.Content}>
+                            <Grid>
+                                <Row size={1} style={Estilos.Backgroud}>
+                                    <Col style={[Estilos.CenterFlex, Estilos.Espaciado]}>
+                                        <Thumbnail large source={{ uri: 'https://cdn0.iconfinder.com/data/icons/halloween-avatars/1024/Capt_Spaulding-01.png' }} />
+                                        <H3 style={Estilos.Color1}>FERNANDO ARAUJO</H3>
+                                    </Col>
                                 </Row>
-                                <Row size={3}>
-
+                                <Row size={4}>
+                                    <Col style={Estilos.Espaciado}>
+                                        {
+                                            Cards.map((Item, Key) => {
+                                                return (
+                                                    <Card style={[Estilos.Card]} key={Key}>
+                                                        <CardItem bordered style={Estilos.Item}>
+                                                            <Icon name={Item.NombreIcono} type='FontAwesome' style={Estilos.Color} />
+                                                            <H3 style={Estilos.Color}>{Item.Texto}</H3>
+                                                            <Body />
+                                                            <Right>
+                                                                <Icon name='hand-o-right' type='FontAwesome' style={Estilos.Color} />
+                                                            </Right>
+                                                        </CardItem>
+                                                    </Card>
+                                                );
+                                            })
+                                        }
+                                    </Col>
                                 </Row>
                             </Grid>
                         </Content>
