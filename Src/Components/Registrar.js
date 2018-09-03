@@ -6,13 +6,14 @@ import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import Alertas from 'react-native-increibles-alertas';
+import { Registro } from '../Controllers/UsuarioController';
 
 export default class Registrar extends React.Component {
 
     constructor(props) {
         super(props);
         StatusBar.setHidden(true);
-        this.state = { Email: '', Password: '', Nombre: '', Alert: { Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: ''} }
+        this.state = { User: { Email: '', Password: '', Nombre: '' }, Alert: { Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => {} } }
     }
 
     Registrar = () => {
@@ -20,7 +21,12 @@ export default class Registrar extends React.Component {
             this.state.Password.indexOf(" ") !== -1) {
             this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: 'Todos los campos son requeridos, email y contraseña no deben tener espacio', Tipo: 'error' } });
         } else {
-
+            this.setState({ Alert: { Mostrar: true, Spinner: true, Mensaje: 'Espere un momento...' } });
+            Registro(this.state.User).then(() => {
+                this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Correcto', Mensaje: 'Por favor revise su email para la verificación', Tipo: 'aprobado', Boton: () => {this.props.navigation.push('Login')} } });
+            }).catch(err => {
+                this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: err.message, Tipo: 'error' } });
+            })
         }
     }
 
@@ -37,7 +43,7 @@ export default class Registrar extends React.Component {
                     TextoBotonCancelado='Cancelar'
                     TextoBotonConfirmado='Ok'
                     onBotonCancelado={() => { }}
-                    onBotonConfirmado={() => { }} />
+                    onBotonConfirmado={this.state.Alert.Boton} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content padder contentContainerStyle={Estilos.Content}>
@@ -50,21 +56,21 @@ export default class Registrar extends React.Component {
                                         <Item floatingLabel last>
                                             <Icon name='pencil' style={Estilos.Color} type='FontAwesome' />
                                             <Label style={Estilos.Color}>Nombre Completo</Label>
-                                            <Input style={Estilos.Color} />
+                                            <Input style={Estilos.Color} onChangeText={text => this.setState({ User: { Nombre: text } })} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
-                                            <Input style={Estilos.Color} />
+                                            <Input style={Estilos.Color} onChangeText={text => this.setState({ User: { Email: text } })} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />
                                             <Label style={Estilos.Color}>Password</Label>
-                                            <Input style={Estilos.Color} secureTextEntry/>
+                                            <Input style={Estilos.Color} secureTextEntry onChangeText={text => this.setState({ User: { Password: text } })} />
                                         </Item>
                                     </Form>
                                 </Row>
-                                <Row size={2} style={Estilos.End}>
+                                <Row size={2} style={Estilos.CenterFlex}>
                                     <Col style={[Estilos.CenterFlex]}>
                                         <Button iconLeft style={Estilos.Boton} block onPress={this.Registrar.bind(this)}>
                                             <Icon name='add-box' type='MaterialIcons' />
@@ -80,7 +86,6 @@ export default class Registrar extends React.Component {
                         </Content>
                     </SimpleAnimation>
                 </LinearGradient>
-
             </Container>
         );
     }
