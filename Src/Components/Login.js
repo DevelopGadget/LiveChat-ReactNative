@@ -23,6 +23,7 @@ export default class Login extends React.Component {
     componentWillMount() {
         this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
         AuthLogin(this.props.navigation).then(() => {
+            this.CambiarEstadoAlert(false, false, '', '', '', () => { })
             this.props.navigation.push('Tabs');
         }).catch(() =>{
             this.CambiarEstadoAlert(false, false, '', '', '', () => { })
