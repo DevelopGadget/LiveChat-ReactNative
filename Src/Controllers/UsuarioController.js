@@ -1,6 +1,6 @@
-import { Auth, Firebase } from './Firebase';
+import { Auth, Firebase, Database } from './Firebase';
 
-export function AuthLogin() {
+export async function AuthLogin() {
     return new Promise((resolve, reject) => {
         Auth.onAuthStateChanged((User) => {
             if (User) {
@@ -34,6 +34,7 @@ export async function Registro(User) {
     return await Auth.createUserWithEmailAndPassword(User.Email, User.Password)
         .then(user => {
             Auth.currentUser.updateProfile({ displayName: User.Nombre, photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' }).then(() => {
+                Database.ref(Auth.currentUser.uid).set({Nombre: Auth.currentUser.displayName, Id: Auth.currentUser.uid, Email: Auth.currentUser.email});
                 Auth.currentUser.sendEmailVerification();
             });
         })

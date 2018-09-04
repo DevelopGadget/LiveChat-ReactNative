@@ -41,6 +41,10 @@ export default class Perfil extends React.Component {
 
     componentWillMount(){
         this.Usuario = Usuario();
+        if(!this.Usuario){
+            this.Usuario.photoURL = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png';
+            this.Usuario.displayName = 'Error al cargar el perfil';
+        }
     }
 
     render() {
