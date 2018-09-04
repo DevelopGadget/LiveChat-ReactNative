@@ -4,9 +4,9 @@ import Estilos from '../Css/Estilos';
 import { LinearGradient } from 'expo';
 import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
-import { SimpleAnimation } from 'react-native-simple-animations';
-import { Restablecer } from '../Controllers/UsuarioController';
 import Alertas from 'react-native-increibles-alertas';
+import { SimpleAnimation } from 'react-native-simple-animations';
+import { Restablecer, LoginAuth } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -27,6 +27,19 @@ export default class Login extends React.Component {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
             Restablecer(this.state.User.Email).then(() => {
                 this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            }).catch(err => {
+                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            })
+        }
+    }
+
+    Entrar = async () => {
+        if (this.state.User.Email.length <= 0) {
+            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+        } else {
+            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            LoginAuth(this.state.User).then(() => {
+                this.props.navigation.push('Tabs');
             }).catch(err => {
                 this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             })
@@ -82,7 +95,7 @@ export default class Login extends React.Component {
                                 </Row>
                                 <Row size={2} style={[Estilos.CenterFlex]}>
                                     <Col style={[Estilos.CenterFlex]}>
-                                        <Button iconLeft style={Estilos.Boton} block>
+                                        <Button iconLeft style={Estilos.Boton} block onPress={this.Entrar.bind(this)}>
                                             <Icon name='login' type='Entypo' />
                                             <Text>Entrar</Text>
                                         </Button>

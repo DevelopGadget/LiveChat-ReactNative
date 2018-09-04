@@ -4,8 +4,8 @@ import Estilos from '../Css/Estilos';
 import { Image, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
-import { SimpleAnimation } from 'react-native-simple-animations';
 import Alertas from 'react-native-increibles-alertas';
+import { SimpleAnimation } from 'react-native-simple-animations';
 import { Registro } from '../Controllers/UsuarioController';
 
 export default class Registrar extends React.Component {
@@ -27,7 +27,7 @@ export default class Registrar extends React.Component {
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
             Registro(this.state.User).then(() => {
-                this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email para la verificación', 'aprobado', () => {this.props.navigation.push('Login')});
+                this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email para la verificación', 'aprobado', () => { this.props.navigation.push('Login') });
             }).catch(err => {
                 this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             })

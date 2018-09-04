@@ -1,7 +1,17 @@
 import { Auth, Firebase } from './Firebase';
 
-export function Login(User) {
-
+export function LoginAuth(User) {
+    return new Promise(function (resolve, reject) {
+        Auth.setPersistence(Firebase.auth.Auth.Persistence.LOCAL).then(() => {
+            Auth.signInWithEmailAndPassword(User.Email, User.Password).catch(err => {
+                reject(err);
+            }).then(() => {
+                resolve('');
+            })
+        }).catch(err => {
+            reject(err);
+        })
+    })
 }
 
 export async function Registro(User) {
