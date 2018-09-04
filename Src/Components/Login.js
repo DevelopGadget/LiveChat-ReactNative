@@ -6,7 +6,7 @@ import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import Alertas from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Restablecer, LoginAuth } from '../Controllers/UsuarioController';
+import { Restablecer, LoginAuth, AuthLogin } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -18,6 +18,15 @@ export default class Login extends React.Component {
                 Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => { }
             }
         }
+    }
+
+    componentWillMount() {
+        this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+        AuthLogin(this.props.navigation).then(() => {
+            this.props.navigation.push('Tabs');
+        }).catch(() =>{
+            this.CambiarEstadoAlert(false, false, '', '', '', () => { })
+        })
     }
 
     Restaurar = async () => {
