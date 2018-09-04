@@ -13,21 +13,37 @@ export default class Registrar extends React.Component {
     constructor(props) {
         super(props);
         StatusBar.setHidden(true);
-        this.state = { User: { Email: '', Password: '', Nombre: '' }, Alert: { Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => {} } }
+        this.state = {
+            User: { Email: '', Password: '', Nombre: '' }, Alert: {
+                Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => this.setState({ Alert: { Mostrar: false } })
+            }
+        }
+    }
+
+    componentDidUpdate() {
+        console.log(this.state);
     }
 
     Registrar = () => {
-        if (this.state.Email.length <= 0 || this.state.Nombre.length <= 0 || this.state.Password.length <= 0 || this.state.Email.indexOf(" ") !== -1 ||
-            this.state.Password.indexOf(" ") !== -1) {
-            this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: 'Todos los campos son requeridos, email y contraseña no deben tener espacio', Tipo: 'error' } });
+        if (this.state.User.Email.length <= 0 || this.state.User.Nombre.length <= 0 || this.state.User.Password.length <= 0 || this.state.User.Email.indexOf(" ") !== -1 ||
+            this.state.User.Password.indexOf(" ") !== -1) {
+            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
         } else {
-            this.setState({ Alert: { Mostrar: true, Spinner: true, Mensaje: 'Espere un momento...' } });
+            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
             Registro(this.state.User).then(() => {
-                this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Correcto', Mensaje: 'Por favor revise su email para la verificación', Tipo: 'aprobado', Boton: () => {this.props.navigation.push('Login')} } });
+                this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email para la verificación', 'aprobado', () => {this.props.navigation.push('Login')});
             }).catch(err => {
-                this.setState({ Alert: { Mostrar: true, Spinner: false, Titulo: 'Error', Mensaje: err.message, Tipo: 'error' } });
+                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             })
         }
+    }
+
+    CambiarEstadoUser = (Nombre, Password, Email) => {
+        this.setState({ User: { Nombre: Nombre, Password: Password, Email: Email } });
+    }
+
+    CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton) => {
+        this.setState({ Alert: { Mostrar: Mostrar, Spinner: Spinner, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton } });
     }
 
     render() {
@@ -39,7 +55,7 @@ export default class Registrar extends React.Component {
                     Mensaje={this.state.Alert.Mensaje}
                     Spinner={this.state.Alert.Spinner}
                     Mostrar={this.state.Alert.Mostrar}
-                    BotonCancelado={true}
+                    BotonCancelado={false}
                     TextoBotonCancelado='Cancelar'
                     TextoBotonConfirmado='Ok'
                     onBotonCancelado={() => { }}
@@ -56,17 +72,17 @@ export default class Registrar extends React.Component {
                                         <Item floatingLabel last>
                                             <Icon name='pencil' style={Estilos.Color} type='FontAwesome' />
                                             <Label style={Estilos.Color}>Nombre Completo</Label>
-                                            <Input style={Estilos.Color} onChangeText={text => this.setState({ User: { Nombre: text } })} />
+                                            <Input style={Estilos.Color} onChangeText={text => this.CambiarEstadoUser(text, this.state.User.Password, this.state.User.Email)} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
-                                            <Input style={Estilos.Color} onChangeText={text => this.setState({ User: { Email: text } })} />
+                                            <Input style={Estilos.Color} onChangeText={text => this.CambiarEstadoUser(this.state.User.Nombre, this.state.User.Password, text)} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />
                                             <Label style={Estilos.Color}>Password</Label>
-                                            <Input style={Estilos.Color} secureTextEntry onChangeText={text => this.setState({ User: { Password: text } })} />
+                                            <Input style={Estilos.Color} secureTextEntry onChangeText={text => this.CambiarEstadoUser(this.state.User.Nombre, text, this.state.User.Email)} />
                                         </Item>
                                     </Form>
                                 </Row>
