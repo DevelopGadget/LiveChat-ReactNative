@@ -20,10 +20,6 @@ export default class Registrar extends React.Component {
         }
     }
 
-    componentDidUpdate() {
-        console.log(this.state);
-    }
-
     Registrar = () => {
         if (this.state.User.Email.length <= 0 || this.state.User.Nombre.length <= 0 || this.state.User.Password.length <= 0 || this.state.User.Email.indexOf(" ") !== -1 ||
             this.state.User.Password.indexOf(" ") !== -1) {
@@ -77,7 +73,7 @@ export default class Registrar extends React.Component {
                                         <Item floatingLabel last>
                                             <Icon name='email' style={Estilos.Color} type='Entypo' />
                                             <Label style={Estilos.Color}>Email</Label>
-                                            <Input style={Estilos.Color} onChangeText={text => this.CambiarEstadoUser(this.state.User.Nombre, this.state.User.Password, text)} />
+                                            <Input style={Estilos.Color} keyboardType='email-address' onChangeText={text => this.CambiarEstadoUser(this.state.User.Nombre, this.state.User.Password, text)} />
                                         </Item>
                                         <Item floatingLabel last>
                                             <Icon name='vpn-key' style={Estilos.Color} type='MaterialIcons' />

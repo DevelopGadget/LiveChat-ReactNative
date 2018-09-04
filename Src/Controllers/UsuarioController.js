@@ -13,8 +13,8 @@ export async function Registro(User) {
         })
 }
 
-export function Restablecer() {
-
+export async function Restablecer(Email) {
+    return await Auth.sendPasswordResetEmail(Email);
 }
 
 export function Eliminar() {
