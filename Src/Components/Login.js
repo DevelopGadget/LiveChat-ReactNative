@@ -15,19 +15,20 @@ export default class Login extends React.Component {
         StatusBar.setHidden(true);
         this.state = {
             User: { Email: '', Password: '' }, Alert: {
-                Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => { }
+                Mostrar: true, Spinner: true, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
             }
         }
     }
 
-    componentWillMount() {
-        this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
-        AuthLogin(this.props.navigation).then(() => {
-            this.CambiarEstadoAlert(false, false, '', '', '', () => { })
-            this.props.navigation.push('Tabs');
-        }).catch(() =>{
-            this.CambiarEstadoAlert(false, false, '', '', '', () => { })
-        })
+    componentDidMount() {
+        setTimeout(() => {
+            AuthLogin(this.props.navigation).then(() => {
+                this.CambiarEstadoAlert(false, false, '', '', '', () => { })
+                this.props.navigation.push('Tabs');
+            }).catch(() => {
+                this.CambiarEstadoAlert(false, false, '', '', '', () => { })
+            })
+        }, 3000);
     }
 
     Restaurar = async () => {

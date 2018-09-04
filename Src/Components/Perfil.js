@@ -5,7 +5,7 @@ import Alertas from 'react-native-increibles-alertas';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Usuario, CerrarSesion } from '../Controllers/UsuarioController';
+import { Usuario, CerrarSesion, BorrarCuenta } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -13,29 +13,29 @@ export default class Perfil extends React.Component {
         super(props);
         this.state = {
             Alert: {
-                Mostrar: false, Spinner: false, Cancelado: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => { }, Cancelar: () => {}
+                Mostrar: false, Spinner: false, Cancelado: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => { }, Cancelar: () => { }
             }
         }
         this.Cards = [
             {
                 Texto: 'Seguidores',
                 NombreIcono: 'heartbeat',
-                Func: () => {}
+                Func: () => { }
             },
             {
                 Texto: 'Seguidos',
                 NombreIcono: 'hand-peace-o',
-                Func: () => {}
+                Func: () => { }
             },
             {
                 Texto: 'Cambiar Foto',
                 NombreIcono: 'image',
-                Func: () => {}
+                Func: () => { }
             },
             {
                 Texto: 'Cambiar Nombre',
                 NombreIcono: 'user',
-                Func: () => {}
+                Func: () => { }
             },
             {
                 Texto: 'Salir',
@@ -45,7 +45,7 @@ export default class Perfil extends React.Component {
             {
                 Texto: 'Borrar Cuenta',
                 NombreIcono: 'user-times',
-                Func: () => {}
+                Func: this.BorrarCuenta
             }
         ];
     }
@@ -59,17 +59,25 @@ export default class Perfil extends React.Component {
     }
 
     Salir = () => {
-        this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere salir?', 'info', () => { 
+        this.MetodoX(CerrarSesion, 'salir'); 
+    }
+
+    MetodoX = (Promesa, Cambio) => {
+        this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere '+Cambio+'?', 'info', () => {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
-            CerrarSesion().then(() => {
-                this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => {}, false);
+            Promesa().then(() => {
+                this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
                 this.props.navigation.push('Login');
             }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => {}, false) }, () => {}, false);
+                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
             })
         }, () => {
-            this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => {}, false);
+            this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
         }, true);
+    }
+
+    BorrarCuenta = () => {
+        this.MetodoX(BorrarCuenta, 'borrar la cuenta'); 
     }
 
     CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {

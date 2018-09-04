@@ -26,8 +26,8 @@ export function CerrarSesion() {
 
 export function BorrarCuenta() {
     return new Promise(function (resolve, reject) {
+        Database.ref('/'+Auth.currentUser.uid).remove();
         Auth.currentUser.delete().then(() => {
-            Database.ref(Auth.currentUser.uid).remove();
             resolve();
         }).catch(() => {
             reject();
