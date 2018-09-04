@@ -4,16 +4,16 @@ export function AuthLogin() {
     return new Promise((resolve, reject) => {
         Auth.onAuthStateChanged((User) => {
             if (User) {
-                if (User.emailVerified) {
-                    resolve('');
-                } else {
-                    reject('');
-                }
+                resolve('');
             } else {
                 reject('');
             }
         });
     })
+}
+
+export function Usuario(){
+    return Auth.currentUser;
 }
 
 export async function LoginAuth(User) {

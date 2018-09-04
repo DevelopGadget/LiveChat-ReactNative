@@ -5,7 +5,7 @@ import Alertas from 'react-native-increibles-alertas';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
-
+import { Usuario } from '../Controllers/UsuarioController';
 const Cards = [
     {
         Texto: 'Seguidores',
@@ -39,6 +39,10 @@ export default class Perfil extends React.Component {
         super(props);
     }
 
+    componentWillMount(){
+        this.Usuario = Usuario();
+    }
+
     render() {
         return (
             <Container>
@@ -48,8 +52,8 @@ export default class Perfil extends React.Component {
                             <Grid>
                                 <Row size={1} style={Estilos.Backgroud}>
                                     <Col style={[Estilos.CenterFlex, Estilos.Espaciado]}>
-                                        <Thumbnail large source={{ uri: 'https://cdn0.iconfinder.com/data/icons/halloween-avatars/1024/Capt_Spaulding-01.png' }} />
-                                        <H3 style={Estilos.Color1}>FERNANDO ARAUJO</H3>
+                                        <Thumbnail large source={{ uri: this.Usuario.photoURL }} onError={() => {this.Usuario.photoURL = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png'}}/>
+                                        <H3 style={Estilos.Color1}>{this.Usuario.displayName}</H3>
                                     </Col>
                                 </Row>
                                 <Row size={4}>
