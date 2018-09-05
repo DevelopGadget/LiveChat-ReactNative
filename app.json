@@ -1,12 +1,15 @@
 {
   "expo": {
     "name": "LiveChat",
-    "description": "This project is really great.",
+    "description": "Chat anonimos ",
     "slug": "LiveChat",
     "privacy": "public",
     "sdkVersion": "29.0.0",
     "primaryColor": "#800080",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

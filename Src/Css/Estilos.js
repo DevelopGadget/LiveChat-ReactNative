@@ -1,9 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export default Estilo = StyleSheet.create({
     Pantalla: {
         width: '100%',
         height: '100%'
+    },
+    Modal: {
+        width: Dimensions.get('window').width - 130,
+        height: 160,
     },
     Content: {
         flex: 1,

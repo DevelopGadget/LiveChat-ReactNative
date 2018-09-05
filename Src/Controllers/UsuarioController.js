@@ -1,5 +1,5 @@
 import { Auth, Firebase, Database, StorageImages } from './Firebase';
-import { ImagePicker, Permissions } from 'expo';
+import { ImagePicker } from 'expo';
 
 export async function AuthLogin() {
     return new Promise((resolve, reject) => {
@@ -18,7 +18,7 @@ export async function CambiarImagen() {
         try {
             let result = ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                aspect: [256, 256],
+                aspect: [1, 1],
                 mediaTypes: 'Images'
             });
             if (!result.cancelled) {
@@ -69,7 +69,9 @@ export function Usuario() {
 }
 
 export function CambiarNombre(Nombre) {
-    return Auth.currentUser.updateProfile({ displayName: Nombre });
+    return Auth.currentUser.updateProfile({ displayName: Nombre }).then((user) => {
+        Database.ref(Auth.currentUser.uid).set({ Nombre: Nombre, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: Auth.currentUser.photoURL });
+    })
 }
 
 export function CerrarSesion() {
@@ -123,7 +125,7 @@ export async function Registro(User) {
     return await Auth.createUserWithEmailAndPassword(User.Email, User.Password)
         .then(user => {
             Auth.currentUser.updateProfile({ displayName: User.Nombre, photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' }).then(() => {
-                Database.ref(Auth.currentUser.uid).set({ Nombre: Auth.currentUser.displayName, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: Auth.currentUser.photoURL });
+                Database.ref(Auth.currentUser.uid).set({ Nombre: Auth.currentUser.displayName, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: Auth.currentUser.photoURL, Seguidos: {}, Seguidores: {} });
                 Auth.currentUser.sendEmailVerification();
             });
         })

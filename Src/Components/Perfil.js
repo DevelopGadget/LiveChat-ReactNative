@@ -1,11 +1,12 @@
 import React from 'react';
-import { Container, Content, H3, Thumbnail, Card, CardItem, Icon, Body, Right } from 'native-base';
+import { Container, Content, H3, Thumbnail, Card, CardItem, Icon, Body, Right, Form, Item, Input, Button, Label, Text } from 'native-base';
 import Estilos from '../Css/Estilos';
 import Alertas from 'react-native-increibles-alertas';
 import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen } from '../Controllers/UsuarioController';
+import ModalBox from 'react-native-modalbox';
+import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen, CambiarNombre } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -18,7 +19,8 @@ export default class Perfil extends React.Component {
             Usuario: {
                 displayName: '',
                 photoURL: ''
-            }
+            },
+            Nombre: ''
         }
         this.Cards = [
             {
@@ -39,7 +41,7 @@ export default class Perfil extends React.Component {
             {
                 Texto: 'Cambiar Nombre',
                 NombreIcono: 'user',
-                Func: () => { }
+                Func: () => { this.refs.Modal.open() }
             },
             {
                 Texto: 'Salir',
@@ -78,14 +80,30 @@ export default class Perfil extends React.Component {
         this.MetodoX(BorrarCuenta, 'borrar la cuenta');
     }
 
+    CambiarName = () => {
+        this.refs.Modal.close();
+        if (this.state.Nombre.length <= 0) {
+            this.CambiarEstadoAlert(true, false, 'Error', 'El campo es requerido', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
+        } else {
+            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
+            CambiarNombre(this.state.Nombre).then(() => {
+                this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
+                setTimeout(() => {
+                    this.UsuarioState();
+                }, 1000);
+            }).catch(err => {
+                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
+            })
+        }
+    }
+
     CambiarImagen = async () => {
         this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
-        CambiarImagen().then((res) => {
+        CambiarImagen().then(() => {
             this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
             setTimeout(() => {
                 this.UsuarioState();
             }, 1000)
-            this.UsuarioState();
         }).catch(err => {
             this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
         })
@@ -123,6 +141,30 @@ export default class Perfil extends React.Component {
                     TextoBotonConfirmado='Ok'
                     onBotonCancelado={this.state.Alert.Cancelar}
                     onBotonConfirmado={this.state.Alert.Boton} />
+                <ModalBox style={Estilos.Modal} position='center' ref='Modal' isDisabled={false} backdropPressToClose swipeToClose={false} onClosed={() => { this.setState({ Nombre: '' }) }}>
+                    <Container>
+                        <Content padder contentContainerStyle={Estilos.Content}>
+                            <Grid>
+                                <Row size={2}>
+                                    <Form style={[Estilos.Content, Estilos.Start]}>
+                                        <Item floatingLabel last>
+                                            <Icon name='email' style={Estilos.Color} type='Entypo' />
+                                            <Label style={Estilos.Color}>Nombre</Label>
+                                            <Input style={Estilos.Color} onChangeText={text => this.setState({ Nombre: text })} />
+                                        </Item>
+                                    </Form>
+                                </Row>
+                                <Row size={1}>
+                                    <Col size={1}>
+                                        <Button block style={Estilos.Backgroud} onPress={this.CambiarName.bind(this)}>
+                                            <Text>Ok</Text>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Grid>
+                        </Content>
+                    </Container>
+                </ModalBox>
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content contentContainerStyle={Estilos.Content}>
