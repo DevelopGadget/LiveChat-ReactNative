@@ -20,7 +20,7 @@ export default class Login extends React.Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         setTimeout(() => {
             AuthLogin(this.props.navigation).then(() => {
                 this.CambiarEstadoAlert(false, false, '', '', '', () => { })

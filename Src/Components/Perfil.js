@@ -55,6 +55,10 @@ export default class Perfil extends React.Component {
     }
 
     async componentWillMount() {
+        this.UsuarioState();
+    }
+
+    UsuarioState = () => {
         this.setState({ Usuario: Usuario() });
         if (!this.state.Usuario) {
             this.setState({ Usuario: { displayName: 'Error al cargar el perfil', photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } })
@@ -74,15 +78,20 @@ export default class Perfil extends React.Component {
         this.MetodoX(BorrarCuenta, 'borrar la cuenta');
     }
 
-    CambiarImagen = () => {
-        CambiarImagen().then(() => {
-
+    CambiarImagen = async () => {
+        this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
+        CambiarImagen().then((res) => {
+            this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
+            setTimeout(() => {
+                this.UsuarioState();
+            }, 1000)
+            this.UsuarioState();
         }).catch(err => {
             this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
         })
     }
 
-    MetodoX = (Promesa, Cambio) => {
+    MetodoX = async (Promesa, Cambio) => {
         this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere ' + Cambio + '?', 'info', () => {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
             Promesa().then(() => {
@@ -96,7 +105,7 @@ export default class Perfil extends React.Component {
         }, true);
     }
 
-    CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {
+    CambiarEstadoAlert = async (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {
         this.setState({ Alert: { Mostrar: Mostrar, Spinner: Spinner, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton, Cancelar: Cancelar, Cancelado: Cancelado } });
     }
 

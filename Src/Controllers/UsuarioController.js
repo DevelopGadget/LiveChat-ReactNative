@@ -18,21 +18,12 @@ export async function CambiarImagen() {
         try {
             let result = ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
-                width: 512,
-                height: 512,
+                aspect: [256, 256],
                 mediaTypes: 'Images'
             });
             if (!result.cancelled) {
                 result.then(img => {
-                    fetch(img.uri).then(res => {
-                        res.blob().then(blob => {
-                            StorageImages.ref().child(Auth.currentUser.uid).put(blob).then(snap => {
-                                resolve();
-                            }).catch(err => {
-                                reject(err);
-                            })
-                        })
-                    })
+                    resolve(fetchImg(img));
                 }).catch(() => {
                     reject({ message: 'Ha ocurrido un error vuelva a intentar' });
                 })
@@ -40,6 +31,36 @@ export async function CambiarImagen() {
         } catch (error) {
             reject({ message: 'Ha ocurrido un error vuelva a intentar' });
         }
+    })
+}
+
+function fetchImg(img) {
+    return new Promise((resolve, reject) => {
+        fetch(img.uri).then(res => {
+            res.blob().then(blob => {
+                resolve(SubirFoto(blob));
+            }).catch(() => {
+                reject({ message: 'Ha ocurrido un error vuelva a intentar' });
+            })
+        }).catch(() => {
+            reject({ message: 'Ha ocurrido un error vuelva a intentar' });
+        })
+    })
+}
+
+function SubirFoto(blob) {
+    return new Promise((resolve, reject) => {
+        StorageImages.ref().child(Auth.currentUser.uid).put(blob).then(snap => {
+            snap.ref.getDownloadURL().then((res) => {
+                Auth.currentUser.updateProfile({ photoURL: res });
+                Database.ref(Auth.currentUser.uid).set({ Nombre: Auth.currentUser.displayName, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: res });
+                resolve();
+            }).catch(err => {
+                reject(err);
+            })
+        }).catch(err => {
+            reject(err);
+        })
     })
 }
 
@@ -58,10 +79,28 @@ export function CerrarSesion() {
 export function BorrarCuenta() {
     return new Promise(function (resolve, reject) {
         Database.ref('/' + Auth.currentUser.uid).remove();
+        StorageImages.ref().child(Auth.currentUser.uid).delete().then(() => {
+            Eliminar().then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
+        }).catch(err => {
+            Eliminar().then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
+        })
+    })
+}
+
+function Eliminar() {
+    return new Promise(function (resolve, reject) {
         Auth.currentUser.delete().then(() => {
             resolve();
-        }).catch(() => {
-            reject();
+        }).catch((err) => {
+            reject(err);
         })
     })
 }
@@ -92,8 +131,4 @@ export async function Registro(User) {
 
 export async function Restablecer(Email) {
     return await Auth.sendPasswordResetEmail(Email);
-}
-
-export function Eliminar() {
-
 }
