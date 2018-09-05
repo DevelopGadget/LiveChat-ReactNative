@@ -2,10 +2,10 @@ import React from 'react';
 import { Container, Content, H3, Thumbnail, Card, CardItem, Icon, Body, Right } from 'native-base';
 import Estilos from '../Css/Estilos';
 import Alertas from 'react-native-increibles-alertas';
-import { LinearGradient } from 'expo';
+import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Usuario, CerrarSesion, BorrarCuenta } from '../Controllers/UsuarioController';
+import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -14,6 +14,10 @@ export default class Perfil extends React.Component {
         this.state = {
             Alert: {
                 Mostrar: false, Spinner: false, Cancelado: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => { }, Cancelar: () => { }
+            },
+            Usuario: {
+                displayName: '',
+                photoURL: ''
             }
         }
         this.Cards = [
@@ -30,7 +34,7 @@ export default class Perfil extends React.Component {
             {
                 Texto: 'Cambiar Foto',
                 NombreIcono: 'image',
-                Func: () => { }
+                Func: this.CambiarImagen
             },
             {
                 Texto: 'Cambiar Nombre',
@@ -50,20 +54,36 @@ export default class Perfil extends React.Component {
         ];
     }
 
-    componentWillMount() {
-        this.Usuario = Usuario();
-        if (!this.Usuario) {
-            this.Usuario.photoURL = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png';
-            this.Usuario.displayName = 'Error al cargar el perfil';
+    async componentWillMount() {
+        this.setState({ Usuario: Usuario() });
+        if (!this.state.Usuario) {
+            this.setState({ Usuario: { displayName: 'Error al cargar el perfil', photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } })
         }
     }
 
+    async componentDidMount() {
+        await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        await Permissions.askAsync(Permissions.CAMERA);
+    }
+
     Salir = () => {
-        this.MetodoX(CerrarSesion, 'salir'); 
+        this.MetodoX(CerrarSesion, 'salir');
+    }
+
+    BorrarCuenta = () => {
+        this.MetodoX(BorrarCuenta, 'borrar la cuenta');
+    }
+
+    CambiarImagen = () => {
+        CambiarImagen().then(() => {
+
+        }).catch(err => {
+            this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
+        })
     }
 
     MetodoX = (Promesa, Cambio) => {
-        this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere '+Cambio+'?', 'info', () => {
+        this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere ' + Cambio + '?', 'info', () => {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
             Promesa().then(() => {
                 this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
@@ -74,10 +94,6 @@ export default class Perfil extends React.Component {
         }, () => {
             this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
         }, true);
-    }
-
-    BorrarCuenta = () => {
-        this.MetodoX(BorrarCuenta, 'borrar la cuenta'); 
     }
 
     CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {
@@ -104,8 +120,8 @@ export default class Perfil extends React.Component {
                             <Grid>
                                 <Row size={1} style={Estilos.Backgroud}>
                                     <Col style={[Estilos.CenterFlex, Estilos.Espaciado]}>
-                                        <Thumbnail large source={{ uri: this.Usuario.photoURL }} onError={() => { this.Usuario.photoURL = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' }} />
-                                        <H3 style={Estilos.Color1}>{this.Usuario.displayName}</H3>
+                                        <Thumbnail large source={{ uri: this.state.Usuario.photoURL }} onError={() => { this.setState({ Usuario: { displayName: this.state.Usuario.displayName, photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } }) }} />
+                                        <H3 style={Estilos.Color1}>{this.state.Usuario.displayName}</H3>
                                     </Col>
                                 </Row>
                                 <Row size={4}>

@@ -16,6 +16,7 @@
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-29.0.0.tar.gz",
     "react-native-easy-grid": "^0.2.0",
+    "react-native-fs": "^2.11.15",
     "react-native-increibles-alertas": "^1.0.3",
     "react-native-simple-animations": "^0.1.2",
     "react-navigation": "^2.11.2"
