@@ -13,6 +13,10 @@ export async function AuthLogin() {
     })
 }
 
+export async function TodosLosUsuarios () {
+    return Database.ref('/').once('value');
+}
+
 export async function CambiarImagen() {
     return new Promise((resolve, reject) => {
         try {

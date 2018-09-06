@@ -87,7 +87,7 @@ export default class Perfil extends React.Component {
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
             CambiarNombre(this.state.Nombre).then(() => {
-                this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
+                this.CambiarEstadoAlert(false, true, '', '', '', () => { }, () => { }, false);
                 setTimeout(() => {
                     this.UsuarioState();
                 }, 1000);
@@ -100,7 +100,7 @@ export default class Perfil extends React.Component {
     CambiarImagen = async () => {
         this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
         CambiarImagen().then(() => {
-            this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
+            this.CambiarEstadoAlert(false, true, '', '', '', () => { }, () => { }, false);
             setTimeout(() => {
                 this.UsuarioState();
             }, 1000)
