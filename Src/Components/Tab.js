@@ -1,11 +1,13 @@
 import React from 'react';
 import Perfil from './Perfil';
+import Busqueda from './Busqueda';
 import { createBottomTabNavigator } from 'react-navigation';
 import { Footer, FooterTab, Button, Icon, Text, StyleProvider, getTheme } from 'native-base';
 import EstiloTab from '../Css/EstiloTab';
 
 export default Tabs = createBottomTabNavigator({
-    Perfil: { screen: Perfil }
+    Perfil: { screen: Perfil },
+    Buscar: { screen: Busqueda }
 },
     {
         tabBarPosition: 'bottom',
@@ -20,7 +22,7 @@ export default Tabs = createBottomTabNavigator({
                                 <Button active={routeName == 'Mensajes'}>
                                     <Icon type='Entypo' name='message' />
                                 </Button>
-                                <Button active={routeName == 'Buscar'}>
+                                <Button active={routeName == 'Buscar'} onPress={() => props.navigation.navigate('Buscar')}>
                                     <Icon type='FontAwesome' name='search' />
                                 </Button>
                                 <Button active={routeName == 'Perfil'} onPress={() => props.navigation.navigate('Perfil')}>

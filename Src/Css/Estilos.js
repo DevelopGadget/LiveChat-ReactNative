@@ -30,6 +30,11 @@ export default Estilo = StyleSheet.create({
         height: '90%',
         flex: 1
     },
+    ImagenPerfil: {
+        width: 126,
+        height: 256,
+        flex: 1
+    },
     Espaciado: {
         justifyContent: 'space-evenly'
     },
