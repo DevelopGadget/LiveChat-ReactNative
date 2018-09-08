@@ -73,7 +73,7 @@ export function Usuario() {
 }
 
 export function CambiarNombre(Nombre) {
-    return Auth.currentUser.updateProfile({ displayName: Nombre }).then((user) => {
+    return Auth.currentUser.updateProfile({ displayName: Nombre.toUpperCase() }).then((user) => {
         Database.ref(Auth.currentUser.uid).set({ Nombre: Nombre, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: Auth.currentUser.photoURL });
     })
 }
@@ -84,9 +84,9 @@ export function CerrarSesion() {
 
 export function BorrarCuenta() {
     return new Promise(function (resolve, reject) {
-        Database.ref('/' + Auth.currentUser.uid).remove();
         StorageImages.ref().child(Auth.currentUser.uid).delete().then(() => {
             Eliminar().then(() => {
+                Database.ref('/' + Auth.currentUser.uid).remove();
                 resolve();
             }).catch((err) => {
                 reject(err);
@@ -128,7 +128,7 @@ export async function LoginAuth(User) {
 export async function Registro(User) {
     return await Auth.createUserWithEmailAndPassword(User.Email, User.Password)
         .then(user => {
-            Auth.currentUser.updateProfile({ displayName: User.Nombre, photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' }).then(() => {
+            Auth.currentUser.updateProfile({ displayName: User.Nombre.toUpperCase(), photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' }).then(() => {
                 Database.ref(Auth.currentUser.uid).set({ Nombre: Auth.currentUser.displayName, Id: Auth.currentUser.uid, Email: Auth.currentUser.email, Foto: Auth.currentUser.photoURL, Seguidos: {}, Seguidores: {} });
                 Auth.currentUser.sendEmailVerification();
             });

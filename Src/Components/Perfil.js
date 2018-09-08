@@ -113,7 +113,6 @@ export default class Perfil extends React.Component {
         this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere ' + Cambio + '?', 'info', () => {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
             Promesa().then(() => {
-                this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
                 this.props.navigation.push('Login');
             }).catch(err => {
                 this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
