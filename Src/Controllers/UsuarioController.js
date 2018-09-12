@@ -13,8 +13,20 @@ export async function AuthLogin() {
     })
 }
 
-export async function TodosLosUsuarios () {
-    return Database.ref('/').once('value');
+export async function TodosLosUsuarios() {
+    return new Promise((resolve, reject) => {
+        Database.ref('/').once('value').then(snap => {
+            var us = [];
+            snap.forEach(Item => {
+                if (Item.toJSON().Id !== Auth.currentUser.uid) {
+                    us.push(Item.toJSON());
+                }
+            })
+            resolve(us);
+        }).catch(() => {
+            reject();
+        })
+    })
 }
 
 export async function CambiarImagen() {
@@ -80,6 +92,60 @@ export function CambiarNombre(Nombre) {
 
 export function CerrarSesion() {
     return Auth.signOut();
+}
+
+export function Seguir(Id) {
+    return new Promise(function (resolve, reject) {
+        Database.ref(Auth.currentUser.uid + '/Seguidos').once('value').then(snap => {
+            if (snap.exists()) {
+                snap.forEach(Item => {
+                    if (Item.toJSON().Id == Id) {
+                        Item.ref.remove().then(() => {
+                            Database.ref(Id + '/Seguidores').once('value').then(res => {
+                                res.forEach(Item2 => {
+                                    if (Item2.toJSON().Id == Auth.currentUser.uid) {
+                                        Item2.ref.remove();
+                                    }
+                                })
+                            })
+                            resolve(false);
+                        }).catch(() => {
+                            reject();
+                        })
+                    } else {
+                        Database.ref(Auth.currentUser.uid + '/Seguidos').push({ Id: Id }).then(() => {
+                            Database.ref(Id + '/Seguidores').push({ Id: Auth.currentUser.uid }).then(() => {
+                                resolve(true);
+                            })
+                        }).catch(() => {
+                            reject();
+                        })
+                    }
+                })
+            } else {
+                Database.ref(Auth.currentUser.uid + '/Seguidos').push({ Id: Id }).then(() => {
+                    Database.ref(Id + '/Seguidores').push({ Id: Auth.currentUser.uid }).then(() => {
+                        resolve(true);
+                    })
+                }).catch(() => {
+                    reject();
+                })
+            }
+        })
+    })
+}
+
+export function Seguidor(Id) {
+    return new Promise(function (resolve, reject) {
+        Database.ref(Auth.currentUser.uid + '/Seguidos').once('value').then(snap => {
+            snap.forEach(Item => {
+                if(Item.toJSON().Id == Id){
+                    resolve(true);
+                }
+            })
+            resolve(false);
+        })
+    });
 }
 
 export function BorrarCuenta() {

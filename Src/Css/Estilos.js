@@ -22,6 +22,9 @@ export default Estilo = StyleSheet.create({
     Color1: {
         color: 'white'
     },
+    Color2: {
+        color: 'red'
+    },
     Backgroud: {
         backgroundColor: 'violet'
     },

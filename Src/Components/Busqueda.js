@@ -1,11 +1,12 @@
 import React from 'react';
-import { Container, Header, Item, Icon, Input, Content, Button, H3, Card, CardItem, Spinner, View } from 'native-base';
-import { Image, ScrollView } from 'react-native';
+import { Container, Header, Item, Icon, Input, Content, Spinner, View } from 'native-base';
+import { ScrollView } from 'react-native';
 import { LinearGradient } from 'expo';
 import Estilos from '../Css/Estilos';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import { TodosLosUsuarios, Usuario } from '../Controllers/UsuarioController';
+import CardPerfil from './CardPerfil';
 
 export default class Busqueda extends React.Component {
 
@@ -22,13 +23,7 @@ export default class Busqueda extends React.Component {
 
     Usuarios = () => {
         TodosLosUsuarios().then(res => {
-            var us = [];
-            res.forEach(Item => {
-                if (Item.toJSON().Id !== this.state.Yo.uid) {
-                    us.push(Item.toJSON());
-                }
-            })
-            this.setState({ Usuarios: us, Backup: us, Correcto: true });
+            this.setState({ Usuarios: res, Backup: res, Correcto: true });
         });
         this.setState({ Load: true });
     }
@@ -55,19 +50,7 @@ export default class Busqueda extends React.Component {
                                 {this.state.Load ?
                                     this.state.Correcto ? this.state.Usuarios.map((Item, Index) => {
                                         return (
-                                            <Card style={[Estilos.Card]} key={Index}>
-                                                <CardItem bordered style={Estilos.Item}>
-                                                    <H3 style={Estilos.Color1}>{Item.Nombre}</H3>
-                                                </CardItem>
-                                                <CardItem bordered style={Estilos.Item} cardBody>
-                                                    <Image source={{ uri: Item.Foto }} style={Estilos.ImagenPerfil} resizeMode='cover' />
-                                                </CardItem>
-                                                <CardItem bordered style={Estilos.Item}>
-                                                    <Button transparent>
-                                                        <Icon active name='heartbeat' type='FontAwesome' style={Estilos.Color1} />
-                                                    </Button>
-                                                </CardItem>
-                                            </Card>
+                                            <CardPerfil Id={Item.Id} Foto={Item.Foto} Nombre={Item.Nombre} key={Index} />
                                         );
                                     }) : null :
                                     <View style={Estilos.CenterFlex}>
