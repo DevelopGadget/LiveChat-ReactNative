@@ -29,6 +29,22 @@ export async function TodosLosUsuarios() {
     })
 }
 
+export async function Seguidos(){
+    return new Promise((resolve, reject) => {
+        Database.ref(Auth.currentUser.uid + '/Seguidos').once('value').then(res => {
+            var ArrayU = [];
+            res.forEach(Item => {
+                Database.ref(Item.toJSON().Id).once('value').then(Snap => {
+                    ArrayU.push(Snap.toJSON());
+                })
+            })
+            resolve(ArrayU);
+        }).catch(() => {
+            reject();
+        })
+    })
+}
+
 export async function CambiarImagen() {
     return new Promise((resolve, reject) => {
         try {
