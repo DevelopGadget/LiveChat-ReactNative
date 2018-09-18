@@ -21,14 +21,14 @@ export default class Cards extends React.Component {
                         <Header searchBar rounded style={Estilos.Backgroud}>
                             <Item>
                                 <Icon name='search' type='FontAwesome' style={Estilos.Color} />
-                                <Input placeholder='Buscar' onChangeText={Texto => this.Buscar(Texto)} />
+                                <Input placeholder='Buscar' onChangeText={Texto => this.props.Busqueda(Texto)} />
                                 <Icon name='users' type='Feather' style={Estilos.Color} />
                             </Item>
                         </Header>
                         <Content padder>
                             <ScrollView>
-                                {this.state.Load ?
-                                    this.state.Correcto ? this.state.Usuarios.map((Item, Index) => {
+                                {this.props.Load ?
+                                    this.props.Correcto ? this.props.Cards.map((Item, Index) => {
                                         return (
                                             <CardPerfil Id={Item.Id} Foto={Item.Foto} Nombre={Item.Nombre} key={Index} />
                                         );

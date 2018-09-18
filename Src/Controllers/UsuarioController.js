@@ -29,22 +29,6 @@ export async function TodosLosUsuarios() {
     })
 }
 
-export async function Seguidos(){
-    return new Promise((resolve, reject) => {
-        Database.ref(Auth.currentUser.uid + '/Seguidos').once('value').then(res => {
-            var ArrayU = [];
-            res.forEach(Item => {
-                Database.ref(Item.toJSON().Id).once('value').then(Snap => {
-                    ArrayU.push(Snap.toJSON());
-                })
-            })
-            resolve(ArrayU);
-        }).catch(() => {
-            reject();
-        })
-    })
-}
-
 export async function CambiarImagen() {
     return new Promise((resolve, reject) => {
         try {
@@ -108,47 +92,6 @@ export function CambiarNombre(Nombre) {
 
 export function CerrarSesion() {
     return Auth.signOut();
-}
-
-export function Seguir(Id) {
-    return new Promise(function (resolve, reject) {
-        Database.ref(Auth.currentUser.uid + '/Seguidos').once('value').then(snap => {
-            if (snap.exists()) {
-                snap.forEach(Item => {
-                    if (Item.toJSON().Id == Id) {
-                        Item.ref.remove().then(() => {
-                            Database.ref(Id + '/Seguidores').once('value').then(res => {
-                                res.forEach(Item2 => {
-                                    if (Item2.toJSON().Id == Auth.currentUser.uid) {
-                                        Item2.ref.remove();
-                                    }
-                                })
-                            })
-                            resolve(false);
-                        }).catch(() => {
-                            reject();
-                        })
-                    } else {
-                        Database.ref(Auth.currentUser.uid + '/Seguidos').push({ Id: Id }).then(() => {
-                            Database.ref(Id + '/Seguidores').push({ Id: Auth.currentUser.uid }).then(() => {
-                                resolve(true);
-                            })
-                        }).catch(() => {
-                            reject();
-                        })
-                    }
-                })
-            } else {
-                Database.ref(Auth.currentUser.uid + '/Seguidos').push({ Id: Id }).then(() => {
-                    Database.ref(Id + '/Seguidores').push({ Id: Auth.currentUser.uid }).then(() => {
-                        resolve(true);
-                    })
-                }).catch(() => {
-                    reject();
-                })
-            }
-        })
-    })
 }
 
 export function Seguidor(Id) {

@@ -6,7 +6,7 @@ import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import ModalBox from 'react-native-modalbox';
-import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen, CambiarNombre, Seguidos } from '../Controllers/UsuarioController';
+import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen, CambiarNombre } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -14,7 +14,7 @@ export default class Perfil extends React.Component {
         super(props);
         this.state = {
             Alert: {
-                Mostrar: true, Spinner: true, Cancelado: false, Titulo: 'Cargando', Mensaje: 'Espere un momento...', Tipo: '', Boton: () => { }, Cancelar: () => { }
+                Mostrar: false, Spinner: true, Cancelado: false, Titulo: 'Cargando', Mensaje: 'Espere un momento...', Tipo: '', Boton: () => { }, Cancelar: () => { }
             },
             Usuario: {
                 displayName: '',
@@ -62,9 +62,6 @@ export default class Perfil extends React.Component {
     }
 
     UsuarioState = () => {
-        Seguidos().then(res => {
-            this.setState({ Seguidos: res });
-        })
         this.setState({ Usuario: Usuario(), Mostrar: false });
         if (!this.state.Usuario) {
             this.setState({ Usuario: { displayName: 'Error al cargar el perfil', photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } })

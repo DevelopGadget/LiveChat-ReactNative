@@ -12,17 +12,9 @@ export default class CardPerfil extends React.Component {
         this.state = { Color: Estilos.Color1 }
     }
 
-    componentWillMount() {
-        Seguidor(this.props.Id).then(res => {
-            res ? this.setState({ Color: Estilos.Color2 }) : this.setState({ Color: Estilos.Color1 });
-        })
-    }
+    componentWillMount() {}
 
-    Favorito = () => {
-        Seguir(this.props.Id).then(res => {
-            res ? this.setState({ Color: Estilos.Color2 }) : this.setState({ Color: Estilos.Color1 });
-        })
-    }
+    Favorito = () => {}
 
     render() {
         return (
