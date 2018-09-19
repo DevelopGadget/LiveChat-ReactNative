@@ -6,6 +6,7 @@ import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import ModalBox from 'react-native-modalbox';
+import { getDatos, CambiarImagen } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -15,6 +16,7 @@ export default class Perfil extends React.Component {
             Alert: {
                 Mostrar: false, Spinner: true, Cancelado: false, Titulo: 'Cargando', Mensaje: 'Espere un momento...', Tipo: '', Boton: () => { }, Cancelar: () => { }
             },
+            Usuario: {Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: ''},
             Nombre: ''
         }
         this.Cards = [
@@ -56,16 +58,25 @@ export default class Perfil extends React.Component {
         await Permissions.askAsync(Permissions.CAMERA);
     }
 
+    componentWillMount() {
+        getDatos('User').then(user => {
+            console.log(user);
+            this.setState({Usuario: JSON.parse(user)});
+        }).catch(err => {
+            this.setState({Usuario: {Nombre: 'Error', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: ''}})
+        })
+    }
+
     Salir = () => {
-        
+
     }
 
     BorrarCuenta = () => {
-        
+
     }
 
     CambiarNombre = () => {
- 
+
     }
 
     CambiarImagen = async () => {
@@ -125,8 +136,8 @@ export default class Perfil extends React.Component {
                             <Grid>
                                 <Row size={1} style={Estilos.Backgroud}>
                                     <Col style={[Estilos.CenterFlex, Estilos.Espaciado]}>
-                                        <Thumbnail large source={{ uri: this.state.Usuario.photoURL }} onError={() => { this.setState({ Usuario: { displayName: this.state.Usuario.displayName, photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } }) }} />
-                                        <H3 style={Estilos.Color1}>{this.state.Usuario.displayName}</H3>
+                                        <Thumbnail large source={{ uri: this.state.Usuario.Foto }} />
+                                        <H3 style={Estilos.Color1}>{this.state.Usuario.Nombre}</H3>
                                     </Col>
                                 </Row>
                                 <Row size={4}>

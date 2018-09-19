@@ -6,7 +6,7 @@ import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import Alertas from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Restablecer, LoginAuth, AuthLogin } from '../Controllers/UsuarioController';
+import { LoginUser, setDatos } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -36,7 +36,16 @@ export default class Login extends React.Component {
         if (this.state.User.Email.length <= 0) {
             this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
         } else {
-
+            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            LoginUser(this.state.User).then((user) => {
+                setDatos(user, 'User').then(() => {
+                    this.props.navigation.push('Tabs');
+                }).catch(() => {
+                    this.CambiarEstadoAlert(true, false, 'Error', 'Ha ocurrido un error vuelva a intentar', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+                }) 
+            }).catch(err => {
+                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            })
         }
     }
 

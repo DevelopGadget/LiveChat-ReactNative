@@ -29,7 +29,7 @@ export default class Registrar extends React.Component {
             RegistrarUser(this.state.User).then(() => {
                 this.CambiarEstadoAlert(true, false, 'Usuario Creado', 'Proceda al login', 'aprobado', () => { this.props.navigation.push('Login') });
             }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.Error, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             });
         }
     }

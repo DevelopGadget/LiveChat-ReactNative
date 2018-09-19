@@ -1,17 +1,34 @@
 import { ImagePicker } from 'expo';
 import Rutas from './Rutas';
+import { AsyncStorage } from 'react-native';
+
+export async function setDatos(Data, Key){
+    return await AsyncStorage.setItem(Key, JSON.stringify(Data));
+}
+
+export async function getDatos(Key){
+   return await AsyncStorage.getItem(Key);
+}
 
 export async function RegistrarUser(Usuario) {
+    return PostSinToken(Rutas.Registrar, Usuario);
+}
+
+export async function LoginUser(Usuario) {
+    return PostSinToken(Rutas.Login, Usuario);
+}
+
+function PostSinToken(url, Data) {
     return new Promise((resolve, reject) => {
-        fetch(Rutas.Registrar, {
+        fetch(url, {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(Usuario),
+            body: JSON.stringify(Data),
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
         }).then(json => json.json()).then(user => {
-            user.Error ? reject({ Error: user.Error }) : resolve('OK');
+            user.Error ? reject(user.Error) : resolve(user);
         }).catch(err => {
-            reject({ Error: 'Ha ocurrido un error vuelva a intentar' });
+            reject('Ha ocurrido un error vuelva a intentar');
         })
     });
 }
