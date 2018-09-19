@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import Alertas from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { Registro } from '../Controllers/UsuarioController';
+import { RegistrarUser } from '../Controllers/UsuarioController';
 
 export default class Registrar extends React.Component {
 
@@ -14,23 +14,28 @@ export default class Registrar extends React.Component {
         super(props);
         StatusBar.setHidden(true);
         this.state = {
-            User: { Email: '', Password: '', Nombre: '' }, Alert: {
+            User: { Email: '', Password: '', Nombre: '', Foto: 'http://pluspng.com/img-png/avengers-logo-png-file-dark-avengers-logo-png-229.png' }, Alert: {
                 Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => this.setState({ Alert: { Mostrar: false } })
             }
         }
     }
 
-    Registrar = () => {
+    Registro = () => {
         if (this.state.User.Email.length <= 0 || this.state.User.Nombre.length <= 0 || this.state.User.Password.length <= 0 || this.state.User.Email.indexOf(" ") !== -1 ||
             this.state.User.Password.indexOf(" ") !== -1) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            RegistrarUser(this.state.User).then(() => {
+                this.CambiarEstadoAlert(true, false, 'Usuario Creado', 'Proceda al login', 'aprobado', () => { this.props.navigation.push('Login') });
+            }).catch(err => {
+                this.CambiarEstadoAlert(true, false, 'Error', err.Error, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            });
         }
     }
 
     CambiarEstadoUser = (Nombre, Password, Email) => {
-        this.setState({ User: { Nombre: Nombre, Password: Password, Email: Email } });
+        this.setState({ User: { Nombre: Nombre, Password: Password, Email: Email, Foto: this.state.User.Foto } });
     }
 
     CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton) => {
@@ -79,7 +84,7 @@ export default class Registrar extends React.Component {
                                 </Row>
                                 <Row size={2} style={Estilos.CenterFlex}>
                                     <Col style={[Estilos.CenterFlex]}>
-                                        <Button iconLeft style={Estilos.Boton} block onPress={this.Registrar.bind(this)}>
+                                        <Button iconLeft style={Estilos.Boton} block onPress={this.Registro.bind(this)}>
                                             <Icon name='add-box' type='MaterialIcons' />
                                             <Text>Registrar</Text>
                                         </Button>

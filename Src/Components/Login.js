@@ -15,7 +15,7 @@ export default class Login extends React.Component {
         StatusBar.setHidden(true);
         this.state = {
             User: { Email: '', Password: '' }, Alert: {
-                Mostrar: true, Spinner: true, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
+                Mostrar: false, Spinner: true, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
             }
         }
     }

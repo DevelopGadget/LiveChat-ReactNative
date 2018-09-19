@@ -1,4 +1,20 @@
 import { ImagePicker } from 'expo';
+import Rutas from './Rutas';
+
+export async function RegistrarUser(Usuario) {
+    return new Promise((resolve, reject) => {
+        fetch(Rutas.Registrar, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(Usuario),
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        }).then(json => json.json()).then(user => {
+            user.Error ? reject({ Error: user.Error }) : resolve('OK');
+        }).catch(err => {
+            reject({ Error: 'Ha ocurrido un error vuelva a intentar' });
+        })
+    });
+}
 
 export async function CambiarImagen() {
     return new Promise((resolve, reject) => {
@@ -34,3 +50,5 @@ function fetchImg(img) {
         })
     })
 }
+
+
