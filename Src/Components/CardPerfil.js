@@ -3,7 +3,6 @@ import { Icon, Button, Card, CardItem, H3 } from 'native-base';
 import Estilos from '../Css/Estilos';
 import { Image } from 'react-native';
 import PropTypes from 'prop-types';
-import { Seguir, Seguidor } from '../Controllers/UsuarioController';
 
 export default class CardPerfil extends React.Component {
 

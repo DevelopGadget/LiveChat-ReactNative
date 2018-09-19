@@ -21,14 +21,7 @@ export default class Login extends React.Component {
     }
 
     async componentDidMount() {
-        setTimeout(() => {
-            AuthLogin(this.props.navigation).then(() => {
-                this.CambiarEstadoAlert(false, false, '', '', '', () => { })
-                this.props.navigation.push('Tabs');
-            }).catch(() => {
-                this.CambiarEstadoAlert(false, false, '', '', '', () => { })
-            })
-        }, 3000);
+
     }
 
     Restaurar = async () => {
@@ -36,11 +29,6 @@ export default class Login extends React.Component {
             this.CambiarEstadoAlert(true, false, 'Error', 'Debe usar el campo del email', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
-            Restablecer(this.state.User.Email).then(() => {
-                this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
-            }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
-            })
         }
     }
 
@@ -48,12 +36,7 @@ export default class Login extends React.Component {
         if (this.state.User.Email.length <= 0) {
             this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
         } else {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
-            LoginAuth(this.state.User).then(() => {
-                this.props.navigation.push('Tabs');
-            }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
-            })
+
         }
     }
 

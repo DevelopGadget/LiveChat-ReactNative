@@ -6,7 +6,6 @@ import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import ModalBox from 'react-native-modalbox';
-import { Usuario, CerrarSesion, BorrarCuenta, CambiarImagen, CambiarNombre } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -16,12 +15,7 @@ export default class Perfil extends React.Component {
             Alert: {
                 Mostrar: false, Spinner: true, Cancelado: false, Titulo: 'Cargando', Mensaje: 'Espere un momento...', Tipo: '', Boton: () => { }, Cancelar: () => { }
             },
-            Usuario: {
-                displayName: '',
-                photoURL: ''
-            },
-            Nombre: '',
-            Seguidos: []
+            Nombre: ''
         }
         this.Cards = [
             {
@@ -57,70 +51,30 @@ export default class Perfil extends React.Component {
         ];
     }
 
-    async componentWillMount() {
-        this.UsuarioState();
-    }
-
-    UsuarioState = () => {
-        this.setState({ Usuario: Usuario(), Mostrar: false });
-        if (!this.state.Usuario) {
-            this.setState({ Usuario: { displayName: 'Error al cargar el perfil', photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-512.png' } })
-        }
-    }
-
     async componentDidMount() {
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
         await Permissions.askAsync(Permissions.CAMERA);
     }
 
     Salir = () => {
-        this.MetodoX(CerrarSesion, 'salir');
+        
     }
 
     BorrarCuenta = () => {
-        this.MetodoX(BorrarCuenta, 'borrar la cuenta');
+        
     }
 
-    CambiarName = () => {
-        this.refs.Modal.close();
-        if (this.state.Nombre.length <= 0) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'El campo es requerido', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
-        } else {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
-            CambiarNombre(this.state.Nombre).then(() => {
-                this.CambiarEstadoAlert(false, true, '', '', '', () => { }, () => { }, false);
-                setTimeout(() => {
-                    this.UsuarioState();
-                }, 1000);
-            }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
-            })
-        }
+    CambiarNombre = () => {
+ 
     }
 
     CambiarImagen = async () => {
         this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
         CambiarImagen().then(() => {
             this.CambiarEstadoAlert(false, true, '', '', '', () => { }, () => { }, false);
-            setTimeout(() => {
-                this.UsuarioState();
-            }, 1000)
         }).catch(err => {
             this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
         })
-    }
-
-    MetodoX = async (Promesa, Cambio) => {
-        this.CambiarEstadoAlert(true, false, 'Confirmar', '¿Seguro que quiere ' + Cambio + '?', 'info', () => {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
-            Promesa().then(() => {
-                this.props.navigation.push('Login');
-            }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
-            })
-        }, () => {
-            this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false);
-        }, true);
     }
 
     CambiarEstadoAlert = async (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {
@@ -156,7 +110,7 @@ export default class Perfil extends React.Component {
                                 </Row>
                                 <Row size={1}>
                                     <Col size={1}>
-                                        <Button block style={Estilos.Backgroud} onPress={this.CambiarName.bind(this)}>
+                                        <Button block style={Estilos.Backgroud} onPress={this.CambiarNombre.bind(this)}>
                                             <Text>Ok</Text>
                                         </Button>
                                     </Col>

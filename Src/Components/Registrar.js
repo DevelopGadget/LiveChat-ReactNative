@@ -26,11 +26,6 @@ export default class Registrar extends React.Component {
             this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
-            Registro(this.state.User).then(() => {
-                this.CambiarEstadoAlert(true, false, 'Correcto', 'Por favor revise su email para la verificación', 'aprobado', () => { this.props.navigation.push('Login') });
-            }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
-            })
         }
     }
 
