@@ -38,11 +38,11 @@ export default class Login extends React.Component {
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
             LoginUser(this.state.User).then((user) => {
-                setDatos(user, 'User').then(() => {
+                setDatos({ Token: user.Token, Nombre: user.Nombre, Foto: user.Foto, Email: this.state.User.Email, Password: this.state.User.Password }, 'User').then(() => {
                     this.props.navigation.push('Tabs');
                 }).catch(() => {
                     this.CambiarEstadoAlert(true, false, 'Error', 'Ha ocurrido un error vuelva a intentar', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
-                }) 
+                })
             }).catch(err => {
                 this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             })

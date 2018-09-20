@@ -1,13 +1,22 @@
 import { ImagePicker } from 'expo';
 import Rutas from './Rutas';
 import { AsyncStorage } from 'react-native';
+import CryotoJs from 'crypto-js';
 
-export async function setDatos(Data, Key){
-    return await AsyncStorage.setItem(Key, JSON.stringify(Data));
+export async function setDatos(Data, Key) {
+    return await AsyncStorage.setItem(Key, CryotoJs.AES.encrypt(JSON.stringify(Data), Rutas.KeyEncriptar));
 }
 
-export async function getDatos(Key){
-   return await AsyncStorage.getItem(Key);
+export async function getDatos(Key) {
+    return new Promise((resolve, reject) => {
+        await AsyncStorage.getItem(Key).then(User => {
+            var bytes = CryptoJs.AES.decrypt(User, Rutas.KeyEncriptar);
+            var decryptedData = JSON.parse(bytes.toString(CryptoJs.enc.Utf8));
+            resolve(decryptedData);
+        }).catch(err => {
+            reject();
+        })
+    })
 }
 
 export async function RegistrarUser(Usuario) {
