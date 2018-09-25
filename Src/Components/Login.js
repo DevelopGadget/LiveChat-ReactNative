@@ -6,7 +6,7 @@ import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import Alertas from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { LoginUser, setDatos } from '../Controllers/UsuarioController';
+import { LoginUser, setDatos, Restablecer, getDatos } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -20,15 +20,22 @@ export default class Login extends React.Component {
         }
     }
 
-    async componentDidMount() {
-
+    componentWillMount() {
+        getDatos('User').then(user => {
+            user ? this.props.navigation.push('Tabs') : null;
+        });
     }
 
     Restaurar = async () => {
         if (this.state.User.Email.length <= 0) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'Debe usar el campo del email', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+            this.CambiarEstadoAlert(true, false, 'Error', 'Debe usar el campo del email', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
         } else {
             this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            Restablecer(this.state.User.Email).then(value => {
+                this.CambiarEstadoAlert(true, false, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            }).catch(err => {
+                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            })
         }
     }
 

@@ -27,6 +27,21 @@ export async function LoginUser(Usuario) {
     return PostSinToken(Rutas.Login, Usuario);
 }
 
+export async function Restablecer(Email) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({Email: Email}),
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+        }).then(json => json.json()).then(user => {
+            user.Error ? reject(user.Error) : resolve(user);
+        }).catch(err => {
+            reject('Ha ocurrido un error vuelva a intentar');
+        })
+    });
+}
+
 function PostSinToken(url, Data) {
     return new Promise((resolve, reject) => {
         fetch(url, {
