@@ -4,7 +4,7 @@ import Estilos from '../Css/Estilos';
 import { Image, StatusBar } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
-import Alertas from 'react-native-increibles-alertas';
+import {AlertasModule, AlertaSpinnerModule} from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import { RegistrarUser } from '../Controllers/UsuarioController';
 
@@ -14,22 +14,24 @@ export default class Registrar extends React.Component {
         super(props);
         StatusBar.setHidden(true);
         this.state = {
-            User: { Email: '', Password: '', Nombre: '', Foto: 'http://pluspng.com/img-png/avengers-logo-png-file-dark-avengers-logo-png-229.png' }, Alert: {
-                Mostrar: false, Spinner: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => this.setState({ Alert: { Mostrar: false } })
-            }
+            User: { Email: '', Password: '', Nombre: '', Foto: 'http://iconbug.com/data/bd/512/f329adad1100d9608c26b3f072aa016f.png' }, 
+            Alert: {
+                Mostrar: false, Titulo: '', Mensaje: '', Tipo: '', Boton: () => this.setState({ Alert: { Mostrar: false } })
+            },
+            Spinner: false
         }
     }
 
     Registro = () => {
         if (this.state.User.Email.length <= 0 || this.state.User.Nombre.length <= 0 || this.state.User.Password.length <= 0 || this.state.User.Email.indexOf(" ") !== -1 ||
             this.state.User.Password.indexOf(" ") !== -1) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            this.CambiarEstadoAlert(true, 'Error', 'Todos los campos son requeridos, email y contraseña no deben tener espacio', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
         } else {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            this.setState({Spinner: true});
             RegistrarUser(this.state.User).then(() => {
-                this.CambiarEstadoAlert(true, false, 'Usuario Creado', 'Proceda al login', 'aprobado', () => { this.props.navigation.push('Login') });
+                this.CambiarEstadoAlert(true, 'Usuario Creado', 'Proceda al login', 'aprobado', () => { this.props.navigation.push('Login') });
             }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             });
         }
     }
@@ -38,26 +40,17 @@ export default class Registrar extends React.Component {
         this.setState({ User: { Nombre: Nombre, Password: Password, Email: Email, Foto: this.state.User.Foto } });
     }
 
-    CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton) => {
-        this.setState({ Alert: { Mostrar: Mostrar, Spinner: Spinner, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton } });
+    CambiarEstadoAlert = (Mostrar, Titulo, Mensaje, Tipo, Boton) => {
+        this.setState({ Alert: { Mostrar: Mostrar, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton }, Spinner: false });
     }
 
     render() {
         return (
             <Container>
-                <Alertas
-                    Tipo={this.state.Alert.Tipo}
-                    Titulo={this.state.Alert.Titulo}
-                    Mensaje={this.state.Alert.Mensaje}
-                    Spinner={this.state.Alert.Spinner}
-                    Mostrar={this.state.Alert.Mostrar}
-                    BotonCancelado={false}
-                    TextoBotonCancelado='Cancelar'
-                    TextoBotonConfirmado='Ok'
-                    onBotonCancelado={() => { }}
-                    onBotonConfirmado={this.state.Alert.Boton} />
+                <AlertasModule Tipo={this.state.Alert.Tipo} Titulo={this.state.Alert.Titulo} Mensaje={this.state.Alert.Mensaje} Mostrar={this.state.Alert.Mostrar} TextoBotonConfirmado='Ok' onBotonConfirmado={this.state.Alert.Boton} />
+                <AlertaSpinnerModule Titulo='Cargando' Mensaje='Espere un momento...' Mostrar={this.state.Spinner} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
-                    <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
+                    <SimpleAnimation style={Estilos.Content} delay={500} duration={1500} direction='left' movementType='slide' staticType='bounce'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
                                 <Row size={1} style={Estilos.End}>

@@ -4,7 +4,7 @@ import Estilos from '../Css/Estilos';
 import { LinearGradient } from 'expo';
 import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
-import Alertas from 'react-native-increibles-alertas';
+import { AlertaSpinnerModule, AlertasModule } from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import { LoginUser, setDatos, Restablecer, getDatos } from '../Controllers/UsuarioController';
 
@@ -15,43 +15,45 @@ export default class Login extends React.Component {
         StatusBar.setHidden(true);
         this.state = {
             User: { Email: '', Password: '' }, Alert: {
-                Mostrar: false, Spinner: true, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
-            }
+                Mostrar: false, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
+            },
+            Spinner: true
         }
     }
 
     componentWillMount() {
         getDatos('User').then(user => {
             user ? this.props.navigation.push('Tabs') : null;
-        });
+        }).catch(err => {});
+        this.setState({ Spinner: false });
     }
 
     Restaurar = async () => {
         if (this.state.User.Email.length <= 0) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'Debe usar el campo del email', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+            this.CambiarEstadoAlert(true, 'Error', 'Debe usar el campo del email', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
         } else {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            this.setState({ Spinner: true });
             Restablecer(this.state.User.Email).then(value => {
-                this.CambiarEstadoAlert(true, false, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
             }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             })
         }
     }
 
     Entrar = async () => {
         if (this.state.User.Email.length <= 0) {
-            this.CambiarEstadoAlert(true, false, 'Error', 'Todos los campos son requeridos', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+            this.CambiarEstadoAlert(true, 'Error', 'Todos los campos son requeridos', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) })
         } else {
-            this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { });
+            this.setState({ Spinner: true });
             LoginUser(this.state.User).then((user) => {
                 setDatos({ Token: user.Token, Nombre: user.Nombre, Foto: user.Foto, Email: this.state.User.Email, Password: this.state.User.Password }, 'User').then(() => {
                     this.props.navigation.push('Tabs');
                 }).catch(() => {
-                    this.CambiarEstadoAlert(true, false, 'Error', 'Ha ocurrido un error vuelva a intentar', 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) })
+                    this.CambiarEstadoAlert(true, 'Error', 'Ha ocurrido un error vuelva a intentar', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) })
                 })
             }).catch(err => {
-                this.CambiarEstadoAlert(true, false, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             })
         }
     }
@@ -60,26 +62,17 @@ export default class Login extends React.Component {
         this.setState({ User: { Password: Password, Email: Email } });
     }
 
-    CambiarEstadoAlert = (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton) => {
-        this.setState({ Alert: { Mostrar: Mostrar, Spinner: Spinner, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton } });
+    CambiarEstadoAlert = (Mostrar, Titulo, Mensaje, Tipo, Boton) => {
+        this.setState({ Alert: { Mostrar: Mostrar, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton }, Spinner: false });
     }
 
     render() {
         return (
             <Container>
-                <Alertas
-                    Tipo={this.state.Alert.Tipo}
-                    Titulo={this.state.Alert.Titulo}
-                    Mensaje={this.state.Alert.Mensaje}
-                    Spinner={this.state.Alert.Spinner}
-                    Mostrar={this.state.Alert.Mostrar}
-                    BotonCancelado={false}
-                    TextoBotonCancelado='Cancelar'
-                    TextoBotonConfirmado='Ok'
-                    onBotonCancelado={() => { }}
-                    onBotonConfirmado={this.state.Alert.Boton} />
+                <AlertasModule Tipo={this.state.Alert.Tipo} Titulo={this.state.Alert.Titulo} Mensaje={this.state.Alert.Mensaje} Mostrar={this.state.Alert.Mostrar} TextoBotonConfirmado='Ok' onBotonConfirmado={this.state.Alert.Boton} />
+                <AlertaSpinnerModule Titulo='Cargando' Mensaje='Espere un momento...' Mostrar={this.state.Spinner} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
-                    <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
+                    <SimpleAnimation style={Estilos.Content} delay={500} duration={1500} direction='left' movementType='slide' staticType='bounce'>
                         <Content padder contentContainerStyle={Estilos.Content}>
                             <Grid>
                                 <Row size={2} style={Estilos.CenterFlex}>

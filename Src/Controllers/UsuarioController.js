@@ -9,7 +9,7 @@ export async function setDatos(Data, Key) {
 
 export async function getDatos(Key) {
     return new Promise((resolve, reject) => {
-        await AsyncStorage.getItem(Key).then(User => {
+        AsyncStorage.getItem(Key).then(User => {
             var bytes = CryptoJs.AES.decrypt(User, Rutas.KeyEncriptar);
             var decryptedData = JSON.parse(bytes.toString(CryptoJs.enc.Utf8));
             resolve(decryptedData);

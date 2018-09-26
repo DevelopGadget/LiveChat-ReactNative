@@ -5,7 +5,7 @@ import Registrar from './Src/Components/Registrar';
 import Tabs from './Src/Components/Tab';
 import { Spinner } from 'native-base';
 import Estilos from './Src/Css/Estilos';
-import { LinearGradient } from 'expo';
+import { LinearGradient, Font } from 'expo';
 import { BackHandler } from 'react-native';
 
 export default class App extends React.Component {
@@ -13,7 +13,6 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { Load: false }
-    console.ignoredYellowBox = ['Setting a timer'];
   }
 
   componentDidMount() {
@@ -23,10 +22,10 @@ export default class App extends React.Component {
   }
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({
+    await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
-    });
+    })
     this.setState({ Load: true });
   }
 

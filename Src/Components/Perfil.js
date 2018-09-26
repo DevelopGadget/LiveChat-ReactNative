@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Content, H3, Thumbnail, Card, CardItem, Icon, Body, Right, Form, Item, Input, Button, Label, Text } from 'native-base';
 import Estilos from '../Css/Estilos';
-import Alertas from 'react-native-increibles-alertas';
+import { AlertaSpinnerModule, AlertasModule, AlertaConfirmModule } from 'react-native-increibles-alertas';
 import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
@@ -13,10 +13,7 @@ export default class Perfil extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Alert: {
-                Mostrar: false, Spinner: true, Cancelado: false, Titulo: 'Cargando', Mensaje: 'Espere un momento...', Tipo: '', Boton: () => { }, Cancelar: () => { }
-            },
-            Usuario: {Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: ''},
+            Usuario: { Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: '' },
             Nombre: ''
         }
         this.Cards = [
@@ -60,10 +57,9 @@ export default class Perfil extends React.Component {
 
     componentWillMount() {
         getDatos('User').then(user => {
-            console.log(user);
-            this.setState({Usuario: JSON.parse(user)});
+            this.setState({ Usuario: JSON.parse(user) });
         }).catch(err => {
-            this.setState({Usuario: {Nombre: 'Error', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: ''}})
+            this.props.navigation.push('Login');
         })
     }
 
@@ -80,32 +76,14 @@ export default class Perfil extends React.Component {
     }
 
     CambiarImagen = async () => {
-        this.CambiarEstadoAlert(true, true, 'Cargando', 'Por favor espere un momento...', 'aprobado', () => { }, () => { }, false);
         CambiarImagen().then(() => {
-            this.CambiarEstadoAlert(false, true, '', '', '', () => { }, () => { }, false);
         }).catch(err => {
-            this.CambiarEstadoAlert(true, false, 'Error', err.message, 'error', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }, () => { }, false) }, () => { }, false);
         })
-    }
-
-    CambiarEstadoAlert = async (Mostrar, Spinner, Titulo, Mensaje, Tipo, Boton, Cancelar, Cancelado) => {
-        this.setState({ Alert: { Mostrar: Mostrar, Spinner: Spinner, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton, Cancelar: Cancelar, Cancelado: Cancelado } });
     }
 
     render() {
         return (
             <Container>
-                <Alertas
-                    Tipo={this.state.Alert.Tipo}
-                    Titulo={this.state.Alert.Titulo}
-                    Mensaje={this.state.Alert.Mensaje}
-                    Spinner={this.state.Alert.Spinner}
-                    Mostrar={this.state.Alert.Mostrar}
-                    BotonCancelado={this.state.Alert.Cancelado}
-                    TextoBotonCancelado='Cancelar'
-                    TextoBotonConfirmado='Ok'
-                    onBotonCancelado={this.state.Alert.Cancelar}
-                    onBotonConfirmado={this.state.Alert.Boton} />
                 <ModalBox style={Estilos.Modal} position='center' ref='Modal' isDisabled={false} backdropPressToClose swipeToClose={false} onClosed={() => { this.setState({ Nombre: '' }) }}>
                     <Container>
                         <Content padder contentContainerStyle={Estilos.Content}>
