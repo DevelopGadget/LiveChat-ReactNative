@@ -20,35 +20,24 @@ export async function getDatos(Key) {
 }
 
 export async function RegistrarUser(Usuario) {
-    return PostSinToken(Rutas.Registrar, Usuario);
+    return Peticiones(Rutas.Registrar, Usuario, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'POST');
 }
 
 export async function LoginUser(Usuario) {
-    return PostSinToken(Rutas.Login, Usuario);
+    return Peticiones(Rutas.Login, Usuario, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'POST');
 }
 
 export async function Restablecer(Email) {
-    return new Promise((resolve, reject) => {
-        fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({Email: Email}),
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        }).then(json => json.json()).then(user => {
-            user.Error ? reject(user.Error) : resolve(user);
-        }).catch(err => {
-            reject('Ha ocurrido un error vuelva a intentar');
-        })
-    });
+    return Peticiones(Rutas.Reset, {Email: Email}, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'PUT');
 }
 
-function PostSinToken(url, Data) {
+function Peticiones(url, Data, Header, Metodo) {
     return new Promise((resolve, reject) => {
         fetch(url, {
-            method: 'POST',
+            method: Metodo,
             mode: 'cors',
             body: JSON.stringify(Data),
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            headers: Header
         }).then(json => json.json()).then(user => {
             user.Error ? reject(user.Error) : resolve(user);
         }).catch(err => {
