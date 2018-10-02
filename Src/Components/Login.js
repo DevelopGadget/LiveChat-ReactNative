@@ -6,7 +6,7 @@ import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { AlertaSpinnerModule, AlertasModule } from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { LoginUser, setDatos, Restablecer, getDatos } from '../Controllers/UsuarioController';
+import { LoginUser, setDatos, Restablecer, getDatos, TokenVerificar } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -23,9 +23,23 @@ export default class Login extends React.Component {
 
     componentWillMount() {
         getDatos('User').then(user => {
-            user ? this.props.navigation.push('Tabs') : null;
-        }).catch(err => {});
-        this.setState({ Spinner: false });
+            if (user) {
+                TokenVerificar(user.Email, user.Password, user.Token).then((json) => {
+                    if (json.status == 202) {
+                        json.then(token => {
+                            setDatos({ Token: token, Nombre: user.Nombre, Foto: user.Foto, Email: user.Email, Password: user.Password }, 'User').then(() => {
+                                this.props.navigation.push('Tabs');
+                            });
+                        });
+                    } else if (json.status == 200) {
+                        this.props.navigation.push('Tabs');
+                    }
+                })
+            }
+            this.setState({ Spinner: false });
+        }).catch(err => {
+            this.setState({ Spinner: false });
+        });
     }
 
     Restaurar = async () => {
@@ -34,7 +48,7 @@ export default class Login extends React.Component {
         } else {
             this.setState({ Spinner: true });
             Restablecer(this.state.User.Email).then(value => {
-                this.CambiarEstadoAlert(true, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, false, '', '', '', () => { }) });
+                this.CambiarEstadoAlert(true, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             }).catch(err => {
                 this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             })

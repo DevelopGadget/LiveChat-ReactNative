@@ -1,10 +1,10 @@
 import { ImagePicker } from 'expo';
 import Rutas from './Rutas';
 import { AsyncStorage } from 'react-native';
-import CryotoJs from 'crypto-js';
+import CryptoJs from 'crypto-js';
 
 export async function setDatos(Data, Key) {
-    return await AsyncStorage.setItem(Key, CryotoJs.AES.encrypt(JSON.stringify(Data), Rutas.KeyEncriptar));
+    return await AsyncStorage.setItem(Key, CryptoJs.AES.encrypt(JSON.stringify(Data), Rutas.KeyEncriptar).toString());
 }
 
 export async function getDatos(Key) {
@@ -28,7 +28,7 @@ export async function LoginUser(Usuario) {
 }
 
 export async function Restablecer(Email) {
-    return Peticiones(Rutas.Reset, {Email: Email}, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'PUT');
+    return Peticiones(Rutas.Reset, { Email: Email }, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'PUT');
 }
 
 function Peticiones(url, Data, Header, Metodo) {
@@ -44,6 +44,20 @@ function Peticiones(url, Data, Header, Metodo) {
             reject('Ha ocurrido un error vuelva a intentar');
         })
     });
+}
+
+export async function TokenVerificar(Email, Password, Token) {
+    return new Promise((resolve, reject) => {
+        fetch(Rutas.VerificarToken, {
+            method: 'GET',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'token': Token, 'email': Email, 'password': Password }
+        }).then(json => {
+            resolve(json);
+        }).catch(err => {
+            reject();
+        });
+    })
 }
 
 export async function CambiarImagen() {

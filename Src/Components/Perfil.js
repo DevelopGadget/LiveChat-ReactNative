@@ -57,7 +57,7 @@ export default class Perfil extends React.Component {
 
     componentWillMount() {
         getDatos('User').then(user => {
-            this.setState({ Usuario: JSON.parse(user) });
+            this.setState({ Usuario: user });
         }).catch(err => {
             this.props.navigation.push('Login');
         })
@@ -91,7 +91,7 @@ export default class Perfil extends React.Component {
                                 <Row size={2}>
                                     <Form style={[Estilos.Content, Estilos.Start]}>
                                         <Item floatingLabel last>
-                                            <Icon name='email' style={Estilos.Color} type='Entypo' />
+                                            <Icon name='user' style={Estilos.Color} type='FontAwesome' />
                                             <Label style={Estilos.Color}>Nombre</Label>
                                             <Input style={Estilos.Color} onChangeText={text => this.setState({ Nombre: text })} />
                                         </Item>
