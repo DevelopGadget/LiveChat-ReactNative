@@ -14,7 +14,11 @@ export default class Perfil extends React.Component {
         super(props);
         this.state = {
             Usuario: { Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: '' },
-            Nombre: ''
+            Nombre: '',
+            Alert: {
+                Mostrar: false, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
+            },
+            Spinner: false
         }
         this.Cards = [
             {
@@ -50,6 +54,10 @@ export default class Perfil extends React.Component {
         ];
     }
 
+    CambiarEstadoAlert = (Mostrar, Titulo, Mensaje, Tipo, Boton) => {
+        this.setState({ Alert: { Mostrar: Mostrar, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton }, Spinner: false });
+    }
+
     async componentDidMount() {
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
         await Permissions.askAsync(Permissions.CAMERA);
@@ -72,7 +80,9 @@ export default class Perfil extends React.Component {
     }
 
     CambiarNombre = () => {
-
+        if (this.state.Nombre.length <= 0) {
+            this.CambiarEstadoAlert(true, 'Error', 'El nombre es requerido', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
+        }
     }
 
     CambiarImagen = async () => {
@@ -108,6 +118,8 @@ export default class Perfil extends React.Component {
                         </Content>
                     </Container>
                 </ModalBox>
+                <AlertasModule Tipo={this.state.Alert.Tipo} Titulo={this.state.Alert.Titulo} Mensaje={this.state.Alert.Mensaje} Mostrar={this.state.Alert.Mostrar} TextoBotonConfirmado='Ok' onBotonConfirmado={this.state.Alert.Boton} />
+                <AlertaSpinnerModule Titulo='Cargando' Mensaje='Espere un momento...' Mostrar={this.state.Spinner} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content contentContainerStyle={Estilos.Content}>
