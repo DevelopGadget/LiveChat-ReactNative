@@ -3,6 +3,8 @@ import Rutas from './Rutas';
 import { AsyncStorage } from 'react-native';
 import CryptoJs from 'crypto-js';
 
+const Headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+
 export async function setDatos(Data, Key) {
     return await AsyncStorage.setItem(Key, CryptoJs.AES.encrypt(JSON.stringify(Data), Rutas.KeyEncriptar).toString());
 }
@@ -20,15 +22,19 @@ export async function getDatos(Key) {
 }
 
 export async function RegistrarUser(Usuario) {
-    return Peticiones(Rutas.Registrar, Usuario, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'POST');
+    return Peticiones(Rutas.Registrar, Usuario, Headers, 'POST');
 }
 
 export async function LoginUser(Usuario) {
-    return Peticiones(Rutas.Login, Usuario, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'POST');
+    return Peticiones(Rutas.Login, Usuario, Headers, 'POST');
 }
 
 export async function Restablecer(Email) {
-    return Peticiones(Rutas.Reset, { Email: Email }, { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 'PUT');
+    return Peticiones(Rutas.Reset, { Email: Email }, Headers, 'PUT');
+}
+
+export async function CambiarNombre(Nombre, Token) {
+    return Peticiones(Rutas.Nombre, { Nombre: Nombre }, Object.assign(Headers, { 'token': Token }), 'PUT');
 }
 
 function Peticiones(url, Data, Header, Metodo) {
@@ -46,17 +52,36 @@ function Peticiones(url, Data, Header, Metodo) {
     });
 }
 
-export async function TokenVerificar(Email, Password, Token) {
+export async function TokenVerificar(user) {
     return new Promise((resolve, reject) => {
         fetch(Rutas.VerificarToken, {
             method: 'GET',
             mode: 'cors',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'token': Token, 'email': Email, 'password': Password }
+            headers: Object.assign(Headers, { 'token': user.Token, 'email': user.Email, 'password': user.Password })
         }).then(json => {
-            resolve(json);
+            console.log(json);
+            switch (json.status) {
+                case 202:
+                    json.json().then(token => {
+                        setDatos({ Token: token, Nombre: user.Nombre, Foto: user.Foto, Email: user.Email, Password: user.Password }, 'User').then(() => {
+                            resolve();
+                        }).catch(err => {
+                            reject();
+                        })
+                    }).catch(err => {
+                        reject();
+                    })
+                    break;
+                case 200:
+                    resolve();
+                    break;
+                default:
+                    reject();
+                    break;
+            }
         }).catch(err => {
             reject();
-        });
+        })
     })
 }
 

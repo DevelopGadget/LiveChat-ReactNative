@@ -6,14 +6,14 @@ import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import ModalBox from 'react-native-modalbox';
-import { getDatos, CambiarImagen } from '../Controllers/UsuarioController';
+import { getDatos, CambiarImagen, CambiarNombre } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            Usuario: { Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: '' },
+            Usuario: { Nombre: '', Foto: 'https://sd.keepcalm-o-matic.co.uk/i/keep-calm-404-profile-pic-not-found.png', Token: '', Email: '', Password: '' },
             Nombre: '',
             Alert: {
                 Mostrar: false, Titulo: 'Cargando', Mensaje: 'Por favor espere un momento...', Tipo: 'aprobado', Boton: () => { }
@@ -79,9 +79,17 @@ export default class Perfil extends React.Component {
 
     }
 
-    CambiarNombre = () => {
+    Nombre = () => {
         if (this.state.Nombre.length <= 0) {
             this.CambiarEstadoAlert(true, 'Error', 'El nombre es requerido', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
+        }else{
+            this.setState({Spinner: true});
+            this.refs.Modal.close();
+            CambiarNombre(this.state.Nombre, this.state.Usuario.Token).then(nombre => {
+                this.setState({Usuario: {Foto: this.state.Usuario.Foto, Nombre: nombre, Token: this.state.Usuario.Token}});
+            }).catch(err => {
+
+            })
         }
     }
 
@@ -109,7 +117,7 @@ export default class Perfil extends React.Component {
                                 </Row>
                                 <Row size={1}>
                                     <Col size={1}>
-                                        <Button block style={Estilos.Backgroud} onPress={this.CambiarNombre.bind(this)}>
+                                        <Button block style={Estilos.Backgroud} onPress={this.Nombre.bind(this)}>
                                             <Text>Ok</Text>
                                         </Button>
                                     </Col>

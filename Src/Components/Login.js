@@ -24,16 +24,10 @@ export default class Login extends React.Component {
     componentWillMount() {
         getDatos('User').then(user => {
             if (user) {
-                TokenVerificar(user.Email, user.Password, user.Token).then((json) => {
-                    if (json.status == 202) {
-                        json.then(token => {
-                            setDatos({ Token: token, Nombre: user.Nombre, Foto: user.Foto, Email: user.Email, Password: user.Password }, 'User').then(() => {
-                                this.props.navigation.push('Tabs');
-                            });
-                        });
-                    } else if (json.status == 200) {
-                        this.props.navigation.push('Tabs');
-                    }
+                TokenVerificar(user).then(() => {
+                    this.props.navigation.push('Tabs');
+                }).catch(() => {
+                    this.setState({ Spinner: false });
                 })
             }
             this.setState({ Spinner: false });
