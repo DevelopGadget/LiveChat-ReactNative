@@ -21,6 +21,10 @@ export async function getDatos(Key) {
     })
 }
 
+export async function BorrarDatos() {
+    return await AsyncStorage.clear();
+}
+
 export async function RegistrarUser(Usuario) {
     return Peticiones(Rutas.Registrar, Usuario, Headers, 'POST');
 }
@@ -47,6 +51,7 @@ function Peticiones(url, Data, Header, Metodo) {
         }).then(json => json.json()).then(user => {
             user.Error ? reject(user.Error) : resolve(user);
         }).catch(err => {
+            console.log(err);
             reject('Ha ocurrido un error vuelva a intentar');
         })
     });
@@ -59,7 +64,6 @@ export async function TokenVerificar(user) {
             mode: 'cors',
             headers: Object.assign(Headers, { 'token': user.Token, 'email': user.Email, 'password': user.Password })
         }).then(json => {
-            console.log(json);
             switch (json.status) {
                 case 202:
                     json.json().then(token => {
@@ -69,7 +73,7 @@ export async function TokenVerificar(user) {
                             reject();
                         })
                     }).catch(err => {
-                        reject();
+                        reject(err.message);
                     })
                     break;
                 case 200:

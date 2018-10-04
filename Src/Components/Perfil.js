@@ -6,7 +6,7 @@ import { LinearGradient, Permissions } from 'expo';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { SimpleAnimation } from 'react-native-simple-animations';
 import ModalBox from 'react-native-modalbox';
-import { getDatos, CambiarImagen, CambiarNombre } from '../Controllers/UsuarioController';
+import { getDatos, CambiarImagen, CambiarNombre, TokenVerificar, BorrarDatos } from '../Controllers/UsuarioController';
 
 export default class Perfil extends React.Component {
 
@@ -55,7 +55,7 @@ export default class Perfil extends React.Component {
     }
 
     CambiarEstadoAlert = (Mostrar, Titulo, Mensaje, Tipo, Boton) => {
-        this.setState({ Alert: { Mostrar: Mostrar, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton }, Spinner: false });
+        this.setState({ Alert: { Mostrar: Mostrar, Titulo: Titulo, Mensaje: Mensaje, Tipo: Tipo, Boton: Boton }, Spinner: false});
     }
 
     async componentDidMount() {
@@ -68,7 +68,7 @@ export default class Perfil extends React.Component {
             this.setState({ Usuario: user });
         }).catch(err => {
             this.props.navigation.push('Login');
-        })
+        });
     }
 
     Salir = () => {
@@ -82,15 +82,37 @@ export default class Perfil extends React.Component {
     Nombre = () => {
         if (this.state.Nombre.length <= 0) {
             this.CambiarEstadoAlert(true, 'Error', 'El nombre es requerido', 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
-        }else{
-            this.setState({Spinner: true});
+        } else {
             this.refs.Modal.close();
+            this.setState({ Spinner: true });
             CambiarNombre(this.state.Nombre, this.state.Usuario.Token).then(nombre => {
-                this.setState({Usuario: {Foto: this.state.Usuario.Foto, Nombre: nombre, Token: this.state.Usuario.Token}});
+                this.setState({ Usuario: { Foto: this.state.Usuario.Foto, Nombre: nombre, Token: this.state.Usuario.Token }, Spinner: false });
             }).catch(err => {
-
-            })
+                if (err == 'Acceso no autorizado') {
+                    this.Auth(this.Nombre);
+                } else {
+                    this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
+                }
+            });
         }
+    }
+
+    Auth = async (Funcion) => {
+        return TokenVerificar(this.state.Usuario).then(() => {
+            getDatos('User').then(user => {
+                this.setState({ Usuario: user });
+                Funcion();
+            }).catch(err => {
+                this.Caducado();
+            });
+        }).catch((err) => {
+            this.Caducado();
+        });
+    }
+
+    Caducado = () => {
+        BorrarDatos();
+        this.CambiarEstadoAlert(true, 'Error', 'La sesión ha caducado vuelva ha loguearse', 'error', () => { this.props.navigation.push('Login') });
     }
 
     CambiarImagen = async () => {
@@ -126,8 +148,8 @@ export default class Perfil extends React.Component {
                         </Content>
                     </Container>
                 </ModalBox>
-                <AlertasModule Tipo={this.state.Alert.Tipo} Titulo={this.state.Alert.Titulo} Mensaje={this.state.Alert.Mensaje} Mostrar={this.state.Alert.Mostrar} TextoBotonConfirmado='Ok' onBotonConfirmado={this.state.Alert.Boton} />
                 <AlertaSpinnerModule Titulo='Cargando' Mensaje='Espere un momento...' Mostrar={this.state.Spinner} />
+                <AlertasModule Tipo={this.state.Alert.Tipo} Titulo={this.state.Alert.Titulo} Mensaje={this.state.Alert.Mensaje} Mostrar={this.state.Alert.Mostrar} TextoBotonConfirmado='Ok' onBotonConfirmado={this.state.Alert.Boton} />
                 <LinearGradient colors={['#800080', '#000']} start={[0, 1]} end={[1, 0]} style={Estilos.Pantalla}>
                     <SimpleAnimation style={Estilos.Content} delay={100} duration={1000} staticType='zoom' movementType='spring' direction='left'>
                         <Content contentContainerStyle={Estilos.Content}>

@@ -28,7 +28,7 @@ export default class Login extends React.Component {
                     this.props.navigation.push('Tabs');
                 }).catch(() => {
                     this.setState({ Spinner: false });
-                })
+                });
             }
             this.setState({ Spinner: false });
         }).catch(err => {
@@ -45,7 +45,7 @@ export default class Login extends React.Component {
                 this.CambiarEstadoAlert(true, 'Enviado', 'Revise su correo para cambiar la contraseña', 'aprobado', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
             }).catch(err => {
                 this.CambiarEstadoAlert(true, 'Error', err, 'error', () => { this.CambiarEstadoAlert(false, '', '', '', () => { }) });
-            })
+            });
         }
     }
 
