@@ -116,8 +116,23 @@ export default class Perfil extends React.Component {
     }
 
     CambiarImagen = async () => {
-        CambiarImagen().then(() => {
+        CambiarImagen(this.state.Usuario.Token).then(primero => {
+            primero.then(segundo => {
+                segundo.then(tercero => {
+                    this.setState({ Spinner: true });
+                    tercero.then(cuarto => {
+
+                    }).catch(err => {
+                        console.log(err);
+                    })
+                }).catch(err => {
+                    console.log(err);
+                })
+            }).catch(err => {
+                console.log(err);
+            })
         }).catch(err => {
+            console.log(err);
         })
     }
 

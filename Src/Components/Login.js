@@ -6,7 +6,7 @@ import { Image, StatusBar } from 'react-native';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { AlertaSpinnerModule, AlertasModule } from 'react-native-increibles-alertas';
 import { SimpleAnimation } from 'react-native-simple-animations';
-import { LoginUser, setDatos, Restablecer, getDatos, TokenVerificar } from '../Controllers/UsuarioController';
+import { LoginUser, setDatos, Restablecer, getDatos, TokenVerificar, BorrarDatos } from '../Controllers/UsuarioController';
 
 export default class Login extends React.Component {
 
@@ -26,14 +26,12 @@ export default class Login extends React.Component {
             if (user) {
                 TokenVerificar(user).then(() => {
                     this.props.navigation.push('Tabs');
-                }).catch(() => {
-                    this.setState({ Spinner: false });
-                });
+                }).catch(err => {
+                    BorrarDatos();
+                })
             }
-            this.setState({ Spinner: false });
-        }).catch(err => {
-            this.setState({ Spinner: false });
-        });
+        }).catch(err => { })
+        this.setState({ Spinner: false });
     }
 
     Restaurar = async () => {

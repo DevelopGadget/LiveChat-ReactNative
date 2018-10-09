@@ -2,6 +2,7 @@ import { ImagePicker } from 'expo';
 import Rutas from './Rutas';
 import { AsyncStorage } from 'react-native';
 import CryptoJs from 'crypto-js';
+import ToBuffer from 'blob-to-buffer';
 
 const Headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
 
@@ -89,7 +90,7 @@ export async function TokenVerificar(user) {
     })
 }
 
-export async function CambiarImagen() {
+export async function CambiarImagen(Token) {
     return new Promise((resolve, reject) => {
         try {
             let result = ImagePicker.launchImageLibraryAsync({
@@ -99,7 +100,7 @@ export async function CambiarImagen() {
             });
             if (!result.cancelled) {
                 result.then(img => {
-                    resolve(fetchImg(img));
+                    resolve(fetchImg(img, Token));
                 }).catch(() => {
                     reject({ message: 'Ha ocurrido un error vuelva a intentar' });
                 })
@@ -110,11 +111,11 @@ export async function CambiarImagen() {
     })
 }
 
-function fetchImg(img) {
+function fetchImg(img, Token) {
     return new Promise((resolve, reject) => {
         fetch(img.uri).then(res => {
             res.blob().then(blob => {
-                resolve(SubirFoto(blob));
+                resolve(SubirFoto(blob, Token));
             }).catch(() => {
                 reject({ message: 'Ha ocurrido un error vuelva a intentar' });
             })
@@ -122,6 +123,12 @@ function fetchImg(img) {
             reject({ message: 'Ha ocurrido un error vuelva a intentar' });
         })
     })
+}
+
+function SubirFoto(blob, Token) {
+    return new Promise((resolve, reject) => {
+        resolve();
+    });
 }
 
 
